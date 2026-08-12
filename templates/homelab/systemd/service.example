@@ -1,0 +1,17 @@
+# Example systemd unit. Copy to the server and replace placeholders.
+# Do not enable this from the laptop installer.
+
+[Unit]
+Description=PROJECT_NAME
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=<USERNAME>
+WorkingDirectory=/opt/PROJECT_NAME
+ExecStart=/usr/bin/python3 /opt/PROJECT_NAME/app.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
