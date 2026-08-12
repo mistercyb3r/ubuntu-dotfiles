@@ -1,0 +1,96 @@
+# Local secrets and credentials — never commit these
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.p12
+*.pfx
+*.key
+!*.pub
+id_rsa
+id_rsa.pub.bak
+id_dsa
+id_ecdsa
+id_ed25519
+id_ed25519_sk
+*_rsa
+*_ed25519
+*.ppk
+.ssh/
+authorized_keys
+known_hosts
+known_hosts.old
+.netrc
+.npmrc
+.pypirc
+credentials.json
+service-account*.json
+secrets.yaml
+secrets.yml
+secrets.json
+auth.json
+*.token
+*.secret
+
+# Private local overrides
+.gitconfig.local
+.zshrc.local
+.config.local
+local.env
+install.local.sh
+
+# Private local overrides
+.gitconfig.local
+.zshrc.local
+.config.local
+local.env
+install.local.sh
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+*.swp
+*.swo
+*.tmp
+.idea/
+.vscode/
+!.vscode/extensions.json
+*.code-workspace
+
+# Cursor local state (keep shared rules if added later)
+.cursor/debug.log
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+
+# Backup / installer state that must never be committed
+backups/
+*.bak
+*.backup
+.local-state/
+
+# Logs
+*.log
+logs/
