@@ -1,0 +1,62 @@
+# Global Git ignore. Applied via core.excludesfile.
+# Project-specific ignores still belong in each repo's .gitignore.
+
+# Secrets — never commit these
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.p12
+*.pfx
+*.key
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.ppk
+.netrc
+.npmrc
+.pypirc
+credentials.json
+service-account*.json
+secrets.yaml
+secrets.yml
+secrets.json
+auth.json
+*.token
+
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+*.swp
+*.swo
+.idea/
+*.code-workspace
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+
+# Build / cache
+dist/
+build/
+.cache/
+*.log

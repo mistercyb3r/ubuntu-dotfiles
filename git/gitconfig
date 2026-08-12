@@ -1,0 +1,76 @@
+# Shared Git defaults included from ~/.gitconfig.
+# This file MUST NOT contain user.name, user.email, tokens, or signing keys.
+
+[init]
+	defaultBranch = main
+
+[color]
+	ui = auto
+
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+
+[merge]
+	conflictstyle = zdiff3
+
+[pull]
+	rebase = false
+
+[fetch]
+	prune = true
+	prunetags = true
+
+[push]
+	autoSetupRemote = true
+	default = simple
+
+[rebase]
+	autoStash = true
+
+[rerere]
+	enabled = true
+
+[help]
+	autocorrect = 20
+
+[core]
+	autocrlf = input
+	safecrlf = warn
+	pager = less -FRX
+
+[commit]
+	verbose = true
+
+[status]
+	showUntrackedFiles = all
+	submoduleSummary = true
+
+[log]
+	date = iso
+	decorate = short
+
+[alias]
+	st = status -sb
+	co = checkout
+	sw = switch
+	br = branch
+	ci = commit
+	amend = commit --amend --no-edit
+	unstage = restore --staged
+	last = log -1 --stat
+	lg = log --oneline --decorate --graph -20
+	lga = log --oneline --decorate --graph --all -30
+	diffc = diff --cached
+	please = push --force-with-lease
+	undo = reset --soft HEAD~1
+	aliases = config --get-regexp ^alias\\.
+	root = rev-parse --show-toplevel
+	ignore-local = update-index --assume-unchanged
+	unignore-local = update-index --no-assume-unchanged
+
+# Enable after GitHub SSH works (see docs/github-ssh.md):
+# [url "git@github.com:"]
+# 	insteadOf = https://github.com/

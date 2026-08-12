@@ -1,0 +1,31 @@
+# Example SSH client configuration.
+# Copy ideas from here into ~/.ssh/config.d/*.conf
+# Replace placeholders. Never put private keys or passwords in this file.
+
+# Global client defaults (safe). Do not enable a server with these settings.
+Host *
+    IdentitiesOnly yes
+    IdentityFile ~/.ssh/id_ed25519
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    HashKnownHosts yes
+    AddKeysToAgent yes
+    # Prefer modern algorithms; OpenSSH on Ubuntu 22.04+ already does this.
+
+# GitHub over SSH (after you add the public key to GitHub)
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+
+# Home server over Tailscale — replace placeholders before use.
+# Copy this block into ~/.ssh/config.d/10-homeserver.conf
+#
+# Host homeserver
+#     HostName <TAILSCALE_IP_OR_MAGICDNS_NAME>
+#     User <USERNAME>
+#     IdentityFile ~/.ssh/id_ed25519
+#     IdentitiesOnly yes
+#     # Optional: jump via Tailscale only; do not expose port 22 on the public internet.
+#     # ProxyJump is not required when both machines are on Tailscale.

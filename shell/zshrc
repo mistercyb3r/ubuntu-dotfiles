@@ -1,0 +1,91 @@
+# Fast, Git-aware developer shell. Sourced from ~/.zshrc via a marked block.
+# Keep this file cheap: no Oh My Zsh, no heavy plugins, lazy-load nvm.
+
+# Guard against double-sourcing
+if [[ -n "${UBUNTU_DOTFILES_ZSHRC_LOADED:-}" ]]; then
+  return 0
+fi
+UBUNTU_DOTFILES_ZSHRC_LOADED=1
+
+# Resolve repo root even if this file is sourced by path.
+if [[ -z "${UBUNTU_DOTFILES_ROOT:-}" ]]; then
+  UBUNTU_DOTFILES_ROOT="${${(%):-%N}:A:h:h}"
+fi
+
+export PATH="${HOME}/.local/bin:${PATH}"
+export EDITOR="${EDITOR:-nano}"
+export VISUAL="${VISUAL:-${EDITOR}}"
+export PAGER="${PAGER:-less}"
+export LESS="-R"
+export LANG="${LANG:-en_GB.UTF-8}"
+export LC_ALL="${LC_ALL:-${LANG}}"
+
+# History: large, shared, no duplicates
+HISTFILE="${HOME}/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt HIST_IGNORE_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS SHARE_HISTORY
+setopt INTERACTIVE_COMMENTS AUTO_CD
+setopt NO_BEEP
+bindkey -e
+
+# Completion (cached)
+autoload -Uz compinit
+_comp_dump="${XDG_CACHE_HOME:-${HOME}/.cache}/zsh/zcompdump"
+mkdir -p "${_comp_dump:h}"
+compinit -d "${_comp_dump}"
+unset _comp_dump
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+# fzf keybindings if the Ubuntu package installed them
+if [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+  source /usr/share/doc/fzf/examples/key-bindings.zsh
+fi
+if [[ -f /usr/share/doc/fzf/examples/completion.zsh ]]; then
+  source /usr/share/doc/fzf/examples/completion.zsh
+fi
+if [[ -f /usr/share/fzf/key-bindings.zsh ]]; then
+  source /usr/share/fzf/key-bindings.zsh
+fi
+
+# Starship prompt
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+# Aliases and functions from this repo
+if [[ -f "${UBUNTU_DOTFILES_ROOT}/shell/aliases.sh" ]]; then
+  source "${UBUNTU_DOTFILES_ROOT}/shell/aliases.sh"
+fi
+if [[ -f "${UBUNTU_DOTFILES_ROOT}/shell/functions.sh" ]]; then
+  source "${UBUNTU_DOTFILES_ROOT}/shell/functions.sh"
+fi
+
+# Local overrides (never committed). Create ~/.zshrc.local for machine-specific extras.
+if [[ -f "${HOME}/.zshrc.local" ]]; then
+  source "${HOME}/.zshrc.local"
+fi
+
+# nvm: lazy-load so interactive shells stay fast.
+export NVM_DIR="${NVM_DIR:-${HOME}/.nvm}"
+_ubuntu_dotfiles_nvm_lazy() {
+  unset -f nvm node npm npx corepack 2>/dev/null
+  if [[ -s "${NVM_DIR}/nvm.sh" ]]; then
+    # shellcheck disable=SC1091
+    . "${NVM_DIR}/nvm.sh"
+  fi
+  if [[ -s "${NVM_DIR}/bash_completion" ]]; then
+    # shellcheck disable=SC1091
+    . "${NVM_DIR}/bash_completion"
+  fi
+}
+nvm()  { _ubuntu_dotfiles_nvm_lazy; nvm "$@"; }
+node() { _ubuntu_dotfiles_nvm_lazy; node "$@"; }
+npm()  { _ubuntu_dotfiles_nvm_lazy; npm "$@"; }
+npx()  { _ubuntu_dotfiles_nvm_lazy; npx "$@"; }
+
+# pipx / uv live in ~/.local/bin (already on PATH)
+
+# Cursor / AI-friendly: show the repo root when inside a git checkout
+export UBUNTU_DOTFILES_SHELL=1

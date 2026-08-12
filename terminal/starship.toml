@@ -1,0 +1,77 @@
+# Professional, fast prompt. Avoids Nerd Font icons so JetBrains Mono works
+# without extra glyph packs. Keep modules cheap for laptop battery life.
+
+"$schema" = "https://starship.rs/config-schema.json"
+
+add_newline = true
+command_timeout = 500
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$docker_context\
+$cmd_duration\
+$line_break\
+$character\
+"""
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "bold cyan"
+
+[git_branch]
+symbol = ""
+format = "[$branch]($style) "
+style = "bold purple"
+
+[git_status]
+format = "([$all_status$ahead_behind]($style) )"
+style = "bold yellow"
+conflicted = "conflict"
+ahead = "↑${count}"
+behind = "↓${count}"
+diverged = "↕"
+untracked = "?"
+stashed = ""
+modified = "*"
+staged = "+"
+renamed = "→"
+deleted = "×"
+
+[python]
+format = "[${version}]($style) "
+style = "yellow"
+python_binary = ["python3", "python"]
+
+[nodejs]
+format = "[${version}]($style) "
+style = "green"
+
+[docker_context]
+format = "[docker:$context]($style) "
+style = "blue"
+only_with_files = true
+
+[cmd_duration]
+min_time = 500
+format = "[took $duration]($style) "
+style = "dimmed yellow"
+
+[username]
+show_always = false
+format = "[$user]($style) "
+
+[hostname]
+ssh_only = true
+format = "[@$hostname]($style) "
+style = "dimmed green"
