@@ -44,8 +44,9 @@ preview-terminal   # show the intended look
 dotfiles-health    # green / yellow / red proof
 stats              # one-shot Nordic card in the terminal
 btop               # live graphs in the terminal
-desktop-stats      # permanent Conky overlay (autostarts)
-desktop-stats stop # remove the overlay until next login
+desktop-stats start  # optional Conky overlay (this session only)
+desktop-stats disable
+recover-desktop    # TTY fix if GNOME freezes / cursor is gone
 z name             # jump to a frequent directory
 ll                 # eza with icons
 y                  # Yazi (if packaged)
@@ -65,6 +66,22 @@ cd ~/ubuntu-dotfiles
 git pull
 bash gnome/dock.sh
 ```
+
+## If GNOME freezes or the cursor is gone
+
+Conky must not autostart on GNOME Wayland. If an older install left it in autostart:
+
+1. `Ctrl+Alt+F3`
+2. Log in
+3. Run:
+
+```bash
+rm -f ~/.config/autostart/ubuntu-dotfiles-conky.desktop
+pkill -u "$USER" conky || true
+sudo systemctl restart gdm
+```
+
+Then on the desktop: `git pull` **before** running `./install.sh` again.
 
 ## After install
 

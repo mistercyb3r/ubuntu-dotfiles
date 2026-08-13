@@ -109,8 +109,20 @@ if command_exists git; then
   log_info "Git user.name and user.email were left unchanged."
 fi
 
+_conky_autostart="${XDG_CONFIG_HOME}/autostart/ubuntu-dotfiles-conky.desktop"
+if [[ -f "${_conky_autostart}" ]]; then
+  if is_dry_run; then
+    log_dry "rm ${_conky_autostart}"
+  else
+    rm -f "${_conky_autostart}"
+    log_success "Removed Conky autostart"
+  fi
+fi
+unset _conky_autostart
+pkill -u "$(id -u)" -f 'conky .*ubuntu-dotfiles.conf' 2>/dev/null || true
+
 # Remove wrappers we linked into ~/.local/bin
-for name in system-info system-update cleanup-system new-project server check-secrets setup-git-identity preview-terminal dotfiles-health theme-health bat fd; do
+for name in system-info system-update cleanup-system new-project server check-secrets setup-git-identity preview-terminal dotfiles-health theme-health desktop-stats recover-desktop bat fd; do
   dest="${XDG_BIN_HOME}/${name}"
   if [[ -L "${dest}" ]]; then
     target="$(readlink -f "${dest}" 2>/dev/null || true)"

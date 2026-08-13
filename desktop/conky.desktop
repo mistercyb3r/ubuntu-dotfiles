@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
 Name=Nordic desktop stats
-Comment=Permanent Conky overlay (ubuntu-dotfiles)
+Comment=Do not autostart. Conky on GNOME Wayland can freeze Mutter.
 Exec=sh -c "$HOME/.local/bin/desktop-stats start"
 Icon=utilities-system-monitor
 Terminal=false
+Hidden=true
 NoDisplay=true
-X-GNOME-Autostart-enabled=true
-X-GNOME-Autostart-Delay=3
+X-GNOME-Autostart-enabled=false

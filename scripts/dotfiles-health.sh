@@ -252,17 +252,15 @@ else
 fi
 unset _stale_kitty
 
-if have conky; then
-  if pgrep -u "$(id -u)" -f 'conky .*ubuntu-dotfiles.conf' >/dev/null 2>&1; then
-    status ok "Desktop stats" "Conky overlay running"
-  elif [[ -f "${XDG_CONFIG_HOME:-${HOME}/.config}/conky/ubuntu-dotfiles.conf" ]]; then
-    status warn "Desktop stats" "config installed; run: desktop-stats start"
-  else
-    status warn "Desktop stats" "conky present; run ./install.sh to install the overlay"
-  fi
+_conky_autostart="${XDG_CONFIG_HOME:-${HOME}/.config}/autostart/ubuntu-dotfiles-conky.desktop"
+if [[ -f "${_conky_autostart}" ]]; then
+  status fail "Desktop stats" "Conky autostart is present — run: recover-desktop"
+elif [[ -f "${XDG_CONFIG_HOME:-${HOME}/.config}/conky/ubuntu-dotfiles.conf" ]]; then
+  status ok "Desktop stats" "opt-in only (desktop-stats start); not autostarted"
 else
-  status warn "Desktop stats" "conky not installed (needed for the permanent overlay)"
+  status ok "Desktop stats" "no Conky autostart"
 fi
+unset _conky_autostart
 
 if command -v gnome-shell >/dev/null 2>&1; then
   status ok "GNOME" "$(gnome-shell --version 2>/dev/null | tr -d '\n')"

@@ -90,23 +90,26 @@ _look_install_nerd_font() {
 }
 
 _look_install_conky() {
-  mkdir -p "${XDG_CONFIG_HOME}/conky" "${XDG_CONFIG_HOME}/autostart"
+  mkdir -p "${XDG_CONFIG_HOME}/conky"
   install_file "${REPO_ROOT}/desktop/conky.conf" "${XDG_CONFIG_HOME}/conky/ubuntu-dotfiles.conf"
-  install_file "${REPO_ROOT}/desktop/conky.desktop" \
-    "${XDG_CONFIG_HOME}/autostart/ubuntu-dotfiles-conky.desktop"
   link_script "${REPO_ROOT}/scripts/desktop-stats.sh" "desktop-stats"
+  link_script "${REPO_ROOT}/scripts/recover-desktop.sh" "recover-desktop"
 
-  if ! command_exists conky; then
-    log_warn "conky is not installed; desktop stats will start after the next ./install.sh"
-    return 0
+  # Never autostart Conky on GNOME. An XWayland overlay at login can freeze
+  # Mutter (no cursor, session hung). Remove any copy left by an older install.
+  local autostart="${XDG_CONFIG_HOME}/autostart/ubuntu-dotfiles-conky.desktop"
+  if [[ -f "${autostart}" ]]; then
+    if is_dry_run; then
+      log_dry "rm ${autostart}"
+    else
+      rm -f "${autostart}"
+      log_success "Removed Conky autostart (it can freeze GNOME Wayland)"
+    fi
   fi
-  if [[ -z "${DISPLAY:-}" && -z "${WAYLAND_DISPLAY:-}" ]]; then
-    log_info "Conky will start at the next GNOME login (autostart)"
-    return 0
+
+  if command_exists pkill; then
+    pkill -u "$(id -u)" -f 'conky .*ubuntu-dotfiles.conf' 2>/dev/null || true
   fi
-  if is_dry_run; then
-    log_dry "desktop-stats start"
-    return 0
-  fi
-  bash "${REPO_ROOT}/scripts/desktop-stats.sh" start || log_warn "Could not start Conky in this session"
+
+  log_info "Desktop stats are opt-in only: desktop-stats start"
 }

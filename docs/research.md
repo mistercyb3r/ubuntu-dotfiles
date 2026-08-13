@@ -13,7 +13,7 @@ Decisions for Ubuntu 26.04 / GNOME 50 on a Latitude 5400 (Intel UHD 620, 16 GB).
 | Dash to Dock from e.g.o | 105 supports 50 | Redundant with Ubuntu Dock. |
 | Clipboard Indicator | — | Redundant. GNOME 50 has a built-in clipboard. |
 | Vitals / dash-to-panel monitors | varies | **Skip.** Always-on sensors hurt battery. Use `stats` / `btop` when needed. |
-| Conky | Desktop overlay | **Installed.** Light Nordic panel, 3s refresh, XWayland on GNOME (Mutter has no layer-shell). `desktop-stats stop` to kill it. |
+| Conky | Desktop overlay | **Opt-in only.** Never autostart on GNOME Wayland — an XWayland overlay at login can freeze Mutter (no cursor). `desktop-stats start` for this session; `recover-desktop` from a TTY if the session hangs. |
 | D2D Companion | 46–50 | Cosmetic dock motion. Skip. |
 
 This repo does not install extensions from extensions.gnome.org.

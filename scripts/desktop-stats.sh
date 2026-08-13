@@ -8,7 +8,11 @@ SRC="${ROOT}/desktop/conky.conf"
 
 usage() {
   cat <<'EOF'
-Usage: desktop-stats [start|stop|restart|status]
+Usage: desktop-stats [start|stop|restart|status|disable]
+
+  start     show the overlay in this session only (does not autostart)
+  stop      hide the overlay
+  disable   hide it and remove login autostart (safe default)
 EOF
 }
 
@@ -31,8 +35,8 @@ start_stats() {
     exit 1
   fi
   if [[ -z "${DISPLAY:-}" && -z "${WAYLAND_DISPLAY:-}" ]]; then
-    printf 'desktop-stats: no graphical session; autostart will run at login\n' >&2
-    exit 0
+    printf 'desktop-stats: no graphical session. Run this on the desktop, not a TTY.\n' >&2
+    exit 1
   fi
   stop_stats
   # GNOME Mutter has no layer-shell. XWayland + below/sticky is what stays on the desktop.
@@ -49,10 +53,17 @@ start_stats() {
   fi
 }
 
-cmd="${1:-start}"
+disable_stats() {
+  stop_stats
+  rm -f "${XDG_CONFIG_HOME:-${HOME}/.config}/autostart/ubuntu-dotfiles-conky.desktop"
+  printf 'desktop-stats: disabled (will not start at login)\n'
+}
+
+cmd="${1:-status}"
 case "${cmd}" in
   start) start_stats ;;
   stop) stop_stats; printf 'desktop-stats: stopped\n' ;;
+  disable) disable_stats ;;
   restart) start_stats ;;
   status)
     if is_running; then
