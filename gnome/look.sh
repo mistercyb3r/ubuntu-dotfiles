@@ -121,6 +121,9 @@ gnome_apply_terminal_theme() {
   _gset_rel "${schema}" default-size-columns "120"
   _gset_rel "${schema}" default-size-rows "32"
   _gset_rel "${schema}" scrollback-unlimited "true"
+  # Force zsh so neofetch / Oh My Zsh run even if the login shell is still bash.
+  _gset_rel "${schema}" use-custom-command "true"
+  _gset_rel "${schema}" custom-command "'zsh'"
 }
 
 # Relocatable gsettings (GNOME Terminal profiles).

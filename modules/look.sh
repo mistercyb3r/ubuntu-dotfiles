@@ -30,6 +30,7 @@ configure_look() {
     gnome_apply_look
     gnome_apply_terminal_theme
     _look_set_default_terminal
+    _look_force_zsh_login
   fi
 
   state_append_list "MODULES" "look"
@@ -116,6 +117,25 @@ _look_install_nerd_font() {
   rm -rf "${tmp}"
   fc-cache -f "${HOME}/.local/share/fonts" >/dev/null 2>&1 || true
   log_success "Installed JetBrainsMono Nerd Font under ${dest}"
+}
+
+_look_force_zsh_login() {
+  local zsh_path
+  zsh_path="$(command -v zsh || true)"
+  [[ -n "${zsh_path}" ]] || return 0
+  local current
+  current="$(getent passwd "$(id -un)" | awk -F: '{print $7}')"
+  if [[ "${current}" == "${zsh_path}" ]]; then
+    return 0
+  fi
+  if grep -qx "${zsh_path}" /etc/shells 2>/dev/null; then
+    log_info "Setting login shell to zsh so every terminal gets neofetch and Oh My Zsh"
+    if is_dry_run; then
+      log_dry "chsh -s ${zsh_path}"
+    else
+      chsh -s "${zsh_path}" || log_warn "chsh failed; run: chsh -s ${zsh_path}"
+    fi
+  fi
 }
 
 _look_set_default_terminal() {

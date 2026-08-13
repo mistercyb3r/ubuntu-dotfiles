@@ -22,6 +22,29 @@ or:
 bash gnome/settings.sh
 ```
 
+## Neofetch / terminal effects do not appear
+
+The Ubuntu default terminal often still starts **bash**, so the zsh theme never loads.
+
+```bash
+cd ~/ubuntu-dotfiles
+git pull
+./install.sh
+chsh -s "$(command -v zsh)"
+```
+
+Then close every terminal and open a **new** one. Check:
+
+```bash
+echo "$SHELL $0"
+command -v neofetch
+command -v starship
+ls ~/.oh-my-zsh/oh-my-zsh.sh
+neofetch
+```
+
+`echo $0` should say `zsh` or `-zsh`. If it says `bash`, the terminal is not using zsh yet — log out of GNOME once, or open Kitty with Super+T.
+
 ## Starship not found after install
 
 Open a **new** terminal. If still missing:

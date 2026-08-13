@@ -54,6 +54,7 @@ APT_CORE_OPTIONAL=(
   wl-clipboard
   plocate
   fonts-firacode
+  neofetch
 )
 
 install_apt_packages() {

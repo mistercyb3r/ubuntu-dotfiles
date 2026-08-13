@@ -18,6 +18,11 @@ configure_shell() {
   block="$(cat <<EOF
 # Managed by ubuntu-dotfiles. Safe to remove this block; your other zsh settings stay.
 export UBUNTU_DOTFILES_ROOT="${REPO_ROOT}"
+export PATH="\${HOME}/.local/bin:\${PATH}"
+# Greeting first — a later plugin error must not hide neofetch.
+if [ -f "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh" ]; then
+  . "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh"
+fi
 if [ -f "\${UBUNTU_DOTFILES_ROOT}/shell/zshrc" ]; then
   . "\${UBUNTU_DOTFILES_ROOT}/shell/zshrc"
 fi
@@ -25,11 +30,18 @@ EOF
 )"
   upsert_marked_block "${HOME}/.zshrc" "${block}"
 
-  # Keep bash usable: add a small pointer so opening a bash terminal still has PATH.
+  # Bash terminals (Ubuntu default until zsh is the login shell) still get the greeting.
   local bash_block
   bash_block="$(cat <<EOF
-# Managed by ubuntu-dotfiles (PATH only; full config lives in zsh).
+# Managed by ubuntu-dotfiles.
+export UBUNTU_DOTFILES_ROOT="${REPO_ROOT}"
 export PATH="\${HOME}/.local/bin:\${PATH}"
+if [ -n "\${PS1:-}" ] && [ -f "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh" ]; then
+  . "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh"
+fi
+if [ -n "\${PS1:-}" ] && command -v starship >/dev/null 2>&1; then
+  eval "\$(starship init bash)"
+fi
 EOF
 )"
   upsert_marked_block "${HOME}/.bashrc" "${bash_block}"
