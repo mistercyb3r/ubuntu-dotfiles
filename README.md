@@ -2,6 +2,8 @@
 
 Reproducible Ubuntu configuration for a **Dell Latitude 5400** used as a software-development laptop: Git, GitHub, Cursor, Docker, SSH, Python, Node.js, and remote administration over Tailscale.
 
+**Repository:** https://github.com/mistercyb3r/ubuntu-dotfiles
+
 This repository is **safe to clone on Windows** for editing. The installer **refuses to run on Windows**. Run it only on the Ubuntu machine.
 
 ## What this project does
@@ -68,7 +70,7 @@ On the **Latitude 5400** (fresh Ubuntu), as your normal user — not root:
 ```bash
 sudo apt-get update
 sudo apt-get install -y git
-git clone <REPOSITORY_URL> ~/ubuntu-dotfiles
+git clone https://github.com/mistercyb3r/ubuntu-dotfiles.git ~/ubuntu-dotfiles
 cd ~/ubuntu-dotfiles
 chmod +x install.sh uninstall.sh scripts/*.sh
 ./install.sh --dry-run
