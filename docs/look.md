@@ -23,7 +23,7 @@ Skip it: `./install.sh --no-look`
 | **fastfetch** | Replaced neofetch for most people |
 | **eza --icons** | Fancy `ls` |
 | **zoxide** | `z project` jumps to frequent dirs |
-| **Papirus + purple Yaru** | Dark desktop without a fragile GTK theme zip |
+| **Bottom dock** | Ubuntu's left side launcher becomes a centred macOS-style dock |
 | **cmatrix / pipes** | Optional toys, not on startup |
 
 Not installed on purpose:
@@ -49,6 +49,18 @@ Turn the greeting off:
 ```bash
 echo 'export UBUNTU_DOTFILES_NO_FETCH=1' >> ~/.zshrc.local
 ```
+
+## Dock only
+
+If the left side panel is still there, run this on the laptop (graphical session):
+
+```bash
+cd ~/ubuntu-dotfiles
+git pull
+bash gnome/dock.sh
+```
+
+That moves Ubuntu Dock to the **bottom**, stops it stretching into a full side bar (`extend-height false`), and keeps it visible like a normal dock.
 
 ## After install
 

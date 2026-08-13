@@ -34,17 +34,7 @@ gnome_apply_look() {
   fi
   _gset org.gnome.desktop.interface enable-animations "true"
 
-  # Dock: floating, slightly transparent, not a full-width bar.
-  _gset org.gnome.shell.extensions.dash-to-dock dock-fixed "false"
-  _gset org.gnome.shell.extensions.dash-to-dock autohide "true"
-  _gset org.gnome.shell.extensions.dash-to-dock intellihide "true"
-  _gset org.gnome.shell.extensions.dash-to-dock extend-height "false"
-  _gset org.gnome.shell.extensions.dash-to-dock dash-max-icon-size "40"
-  _gset org.gnome.shell.extensions.dash-to-dock transparency-mode "'FIXED'"
-  _gset org.gnome.shell.extensions.dash-to-dock background-opacity "0.55"
-  _gset org.gnome.shell.extensions.dash-to-dock custom-theme-shrink "true"
-  _gset org.gnome.shell.extensions.dash-to-dock dock-position "'BOTTOM'"
-
+  gnome_apply_dock
   _look_set_wallpaper
 }
 

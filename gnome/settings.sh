@@ -30,17 +30,9 @@ gnome_apply_settings() {
   _gset org.gnome.desktop.wm.preferences focus-mode "'click'"
   _gset org.gnome.desktop.wm.preferences auto-raise "false"
 
-  # Ubuntu Dock (Dash to Dock fork shipped with Ubuntu)
-  _gset org.gnome.shell.extensions.dash-to-dock dock-fixed "false"
-  _gset org.gnome.shell.extensions.dash-to-dock autohide "true"
-  _gset org.gnome.shell.extensions.dash-to-dock intellihide "true"
-  _gset org.gnome.shell.extensions.dash-to-dock isolate-workspaces "true"
-  _gset org.gnome.shell.extensions.dash-to-dock show-trash "false"
-  _gset org.gnome.shell.extensions.dash-to-dock show-mounts "false"
-  _gset org.gnome.shell.extensions.dash-to-dock click-action "'minimize-or-previews'"
-  _gset org.gnome.shell.extensions.dash-to-dock disable-overview-on-startup "true"
-  _gset org.gnome.shell.extensions.dash-to-dock dash-max-icon-size "36"
-  _gset org.gnome.shell.extensions.dash-to-dock dock-position "'BOTTOM'"
+  # Ubuntu's default left launcher is a full-height side panel.
+  # Turn it into a centred bottom dock (the usual macOS-style setup).
+  gnome_apply_dock
 
   # Touchpad (Latitude 5400)
   _gset org.gnome.desktop.peripherals.touchpad tap-to-click "true"
@@ -76,6 +68,36 @@ gnome_apply_settings() {
 
   _gnome_keyboard_shortcuts
   log_success "GNOME settings applied"
+}
+
+gnome_apply_dock() {
+  log_info "Moving the Ubuntu side launcher to a centred bottom dock"
+
+  # Position: bottom, not left. extend-height=false is what stops the "side panel".
+  _gset org.gnome.shell.extensions.dash-to-dock dock-position "'BOTTOM'"
+  _gset org.gnome.shell.extensions.dash-to-dock extend-height "false"
+  _gset org.gnome.shell.extensions.dash-to-dock dock-alignment "'CENTER'"
+
+  # Always visible like a dock, not an auto-hiding side strip.
+  _gset org.gnome.shell.extensions.dash-to-dock dock-fixed "true"
+  _gset org.gnome.shell.extensions.dash-to-dock autohide "false"
+  _gset org.gnome.shell.extensions.dash-to-dock intellihide "false"
+  _gset org.gnome.shell.extensions.dash-to-dock autohide-in-fullscreen "true"
+
+  _gset org.gnome.shell.extensions.dash-to-dock custom-theme-shrink "true"
+  _gset org.gnome.shell.extensions.dash-to-dock transparency-mode "'FIXED'"
+  _gset org.gnome.shell.extensions.dash-to-dock background-opacity "0.55"
+  _gset org.gnome.shell.extensions.dash-to-dock dash-max-icon-size "42"
+  _gset org.gnome.shell.extensions.dash-to-dock running-indicator-style "'DOTS'"
+  _gset org.gnome.shell.extensions.dash-to-dock click-action "'minimize-or-previews'"
+  _gset org.gnome.shell.extensions.dash-to-dock isolate-workspaces "true"
+  _gset org.gnome.shell.extensions.dash-to-dock show-trash "false"
+  _gset org.gnome.shell.extensions.dash-to-dock show-mounts "false"
+  _gset org.gnome.shell.extensions.dash-to-dock show-show-apps-button "true"
+  _gset org.gnome.shell.extensions.dash-to-dock show-apps-at-top "false"
+  _gset org.gnome.shell.extensions.dash-to-dock disable-overview-on-startup "true"
+  _gset org.gnome.shell.extensions.dash-to-dock unity-backlit-items "false"
+  _gset org.gnome.shell.extensions.dash-to-dock apply-custom-theme "false"
 }
 
 _gnome_keyboard_shortcuts() {
