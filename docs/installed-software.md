@@ -65,7 +65,8 @@ If `docker` is already on `PATH`, it is **not** replaced.
 | `gnome-tweaks` | Full profile only; settings UI. No extension dump |
 | `papirus-icon-theme` | Dark icon set for the look profile |
 | `kitty` | GPU terminal with transparency and cursor trail |
-| `zsh-autosuggestions` | Ghost-text suggestions (the usual fancy zsh effect) |
+| Oh My Zsh | Official git clone; plugins only (prompt stays Starship) |
+| `zsh-autosuggestions` | Ghost-text suggestions |
 | `zsh-syntax-highlighting` | Live red/green command colouring |
 | `zoxide` | Fast directory jumper (`z`) |
 | `neofetch` | Classic greeting fallback |

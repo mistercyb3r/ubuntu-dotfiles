@@ -92,7 +92,7 @@ gnome_apply_dock() {
   _gset org.gnome.shell.extensions.dash-to-dock custom-theme-shrink "true"
   _gset org.gnome.shell.extensions.dash-to-dock transparency-mode "'FIXED'"
   _gset org.gnome.shell.extensions.dash-to-dock background-opacity "0.55"
-  _gset org.gnome.shell.extensions.dash-to-dock dash-max-icon-size "42"
+  _gset org.gnome.shell.extensions.dash-to-dock dash-max-icon-size "32"
   _gset org.gnome.shell.extensions.dash-to-dock running-indicator-style "'DOTS'"
   _gset org.gnome.shell.extensions.dash-to-dock click-action "'minimize-or-previews'"
   _gset org.gnome.shell.extensions.dash-to-dock isolate-workspaces "true"

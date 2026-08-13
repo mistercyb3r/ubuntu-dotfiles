@@ -17,10 +17,9 @@ Skip it: `./install.sh --no-look`
 | **Kitty** | GPU terminal, transparency, cursor trail |
 | **JetBrainsMono Nerd Font** | Icons in the prompt and `eza` |
 | **Catppuccin Mocha** | The palette almost every rice uses |
-| **Starship** | Fast prompt (instead of Oh My Zsh / Powerlevel10k) |
-| **zsh-autosuggestions** | Grey ghost text as you type |
-| **zsh-syntax-highlighting** | Green valid commands, red typos |
-| **fastfetch** | Replaced neofetch for most people |
+| **Oh My Zsh** | Plugin framework (git, fzf, ghost text, syntax colours) |
+| **Starship** | Prompt (faster than an OMZ theme) |
+| **neofetch** | Full system card when a terminal opens |
 | **eza --icons** | Fancy `ls` |
 | **zoxide** | `z project` jumps to frequent dirs |
 | **Bottom dock** | Ubuntu's left side launcher becomes a centred macOS-style dock |
@@ -29,15 +28,15 @@ Skip it: `./install.sh --no-look`
 Not installed on purpose:
 
 - **Hyprland** — different desktop, worse battery/stability on this laptop
-- **Oh My Zsh** — slow; Starship + two plugins is the modern equivalent
+- **Powerlevel10k / heavy OMZ themes** — Starship is the prompt; OMZ is only for plugins
 - **Blur my Shell** — pretty, but it stutters on Intel UHD 620
 - Theme PPAs and random `curl \| sh` rices
 
 ## Everyday commands
 
 ```bash
-# Super+T  →  Kitty
-fetch      # fastfetch / neofetch
+# Super+T  →  Kitty (zsh + Oh My Zsh + neofetch)
+fetch      # run neofetch again
 matrix     # green rain (q to quit)
 pipes      # colourful pipes (Ctrl-C to quit)
 z name     # jump to a directory you use often

@@ -9,9 +9,10 @@ configure_look() {
     return 0
   fi
 
-  log_info "Applying the current popular Ubuntu look (Catppuccin + Kitty + fetch)"
+  log_info "Applying the current popular Ubuntu look (Catppuccin + Kitty + Oh My Zsh + neofetch)"
 
   _look_install_nerd_font
+  _look_install_oh_my_zsh
   install_file "${REPO_ROOT}/terminal/fastfetch.jsonc" \
     "${XDG_CONFIG_HOME}/fastfetch/config.jsonc"
   install_file "${REPO_ROOT}/terminal/neofetch.conf" \
@@ -32,8 +33,54 @@ configure_look() {
   fi
 
   state_append_list "MODULES" "look"
-  log_success "Look applied. Open Kitty (Super+T) and log out/in once for GNOME."
-  log_info "Greeting: fetch   Effects: matrix   Jump dirs: z <name> (if zoxide is installed)"
+  log_success "Look applied. Open Kitty (Super+T): zsh + Oh My Zsh + neofetch."
+  log_info "Greeting: neofetch   Effects: matrix / pipes   Jump dirs: z <name>"
+}
+
+_look_install_oh_my_zsh() {
+  local omz="${HOME}/.oh-my-zsh"
+  local custom="${omz}/custom/plugins"
+
+  if [[ -s "${omz}/oh-my-zsh.sh" ]]; then
+    log_skip "Oh My Zsh already present at ${omz}"
+  else
+    log_info "Installing Oh My Zsh from the official GitHub repository (git clone, not curl | bash)"
+    if is_dry_run; then
+      log_dry "git clone https://github.com/ohmyzsh/ohmyzsh.git ${omz}"
+    else
+      if git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git "${omz}"; then
+        log_success "Oh My Zsh installed"
+      else
+        log_warn "Oh My Zsh clone failed. Re-run ./install.sh when GitHub is reachable."
+      fi
+    fi
+  fi
+
+  mkdir -p "${custom}" 2>/dev/null || true
+
+  if [[ ! -d "${custom}/zsh-autosuggestions" ]]; then
+    if is_dry_run; then
+      log_dry "git clone zsh-autosuggestions into ${custom}"
+    else
+      git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions.git \
+        "${custom}/zsh-autosuggestions" \
+        || log_warn "Could not clone zsh-autosuggestions"
+    fi
+  else
+    log_skip "zsh-autosuggestions plugin already present"
+  fi
+
+  if [[ ! -d "${custom}/zsh-syntax-highlighting" ]]; then
+    if is_dry_run; then
+      log_dry "git clone zsh-syntax-highlighting into ${custom}"
+    else
+      git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git \
+        "${custom}/zsh-syntax-highlighting" \
+        || log_warn "Could not clone zsh-syntax-highlighting"
+    fi
+  else
+    log_skip "zsh-syntax-highlighting plugin already present"
+  fi
 }
 
 _look_install_nerd_font() {
