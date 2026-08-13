@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Verify Kitty, Starship and tmux still use theme/palette.env.
+# Verify Ptyxis, Starship and tmux still use theme/palette.env.
 # Safe on Windows (Git Bash) and Ubuntu. Does not change the system.
 set -euo pipefail
 
@@ -16,8 +16,6 @@ fi
 ok=0
 warn=0
 fail=0
-
-norm() { printf '%s' "$1" | tr '[:lower:]' '[:upper:]'; }
 
 has_hex() {
   local file="$1"
@@ -42,23 +40,45 @@ legacy() {
   local file="$1"
   local hex="$2"
   local why="$3"
-  if has_hex "${file}" "${hex}"; then
+  if [[ -f "${file}" ]] && has_hex "${file}" "${hex}"; then
     printf '● leftover %s in %s (%s)\n' "${hex}" "${file}" "${why}" >&2
     warn=$((warn + 1))
   fi
 }
 
-KITTY="${ROOT}/terminal/kitty.conf"
+PTYXIS="${ROOT}/terminal/ptyxis/Workstation.palette"
 STARSHIP="${ROOT}/terminal/starship.toml"
 TMUX="${ROOT}/terminal/tmux.conf"
+GTK4="${ROOT}/theme/gtk-4.0.css"
+WALL="${ROOT}/theme/wallpapers/nordic-polar.svg"
+KITTY="${ROOT}/terminal/kitty.conf"
 
 printf 'theme-health  palette=%s\n' "${PALETTE}"
 
-check "${KITTY}" "${UDF_BG}" "Kitty background"
-check "${KITTY}" "${UDF_FG}" "Kitty foreground"
-check "${KITTY}" "${UDF_CYAN}" "Kitty accent"
-check "${KITTY}" "${UDF_SELECTION}" "Kitty selection"
-check "${KITTY}" "${UDF_CURSOR}" "Kitty cursor"
+if [[ -f "${KITTY}" ]]; then
+  printf '✗ stale Kitty config still present: %s\n' "${KITTY}" >&2
+  fail=$((fail + 1))
+else
+  printf '✓ Kitty config removed\n'
+  ok=$((ok + 1))
+fi
+
+check "${PTYXIS}" "${UDF_BG}" "Ptyxis background"
+check "${PTYXIS}" "${UDF_FG}" "Ptyxis foreground"
+check "${PTYXIS}" "${UDF_CYAN}" "Ptyxis cyan"
+check "${PTYXIS}" "${UDF_BLUE}" "Ptyxis blue"
+check "${PTYXIS}" "${UDF_PURPLE}" "Ptyxis purple"
+check "${PTYXIS}" "${UDF_GREEN}" "Ptyxis green"
+check "${PTYXIS}" "${UDF_RED}" "Ptyxis red"
+check "${PTYXIS}" "${UDF_YELLOW}" "Ptyxis yellow"
+
+if [[ -n "${UDF_OPACITY:-}" ]]; then
+  printf '✓ Ptyxis opacity token  %s\n' "${UDF_OPACITY}"
+  ok=$((ok + 1))
+else
+  printf '✗ UDF_OPACITY missing from %s\n' "${PALETTE}" >&2
+  fail=$((fail + 1))
+fi
 
 check "${STARSHIP}" "${UDF_CYAN}" "Starship directory/rails"
 check "${STARSHIP}" "${UDF_PURPLE}" "Starship git/user"
@@ -69,13 +89,17 @@ check "${TMUX}" "${UDF_BG}" "tmux background"
 check "${TMUX}" "${UDF_CYAN}" "tmux accent"
 check "${TMUX}" "${UDF_FG}" "tmux foreground"
 
-legacy "${KITTY}" "#c0caf5" "old Tokyo Night foreground"
+check "${GTK4}" "${UDF_CYAN}" "GTK4 frost accent"
+check "${GTK4}" "${UDF_BG}" "GTK4 window background"
+check "${WALL}" "${UDF_POLAR_DARKEST:-#1F232B}" "wallpaper polar darkest"
+check "${WALL}" "${UDF_FROST_CYAN:-#88C0D0}" "wallpaper frost"
+
+legacy "${PTYXIS}" "#0B0E14" "old Tokyo Night background"
+legacy "${STARSHIP}" "#7DCFFF" "old Tokyo Night cyan"
 legacy "${STARSHIP}" "#c0caf5" "old Tokyo Night foreground"
-legacy "${TMUX}" "#c0caf5" "old Tokyo Night foreground"
-legacy "${KITTY}" "#1e1e2e" "Catppuccin Mocha"
-legacy "${KITTY}" "#cdd6f4" "Catppuccin Mocha"
+legacy "${TMUX}" "#0B0E14" "old Tokyo Night background"
+legacy "${TMUX}" "#7DCFFF" "old Tokyo Night cyan"
 legacy "${STARSHIP}" "#ff9e64" "off-palette orange"
-legacy "${KITTY}" "cursor_trail" "motion effect"
 
 printf '\n%d ok  %d warn  %d fail\n' "${ok}" "${warn}" "${fail}"
 if [[ "${fail}" -gt 0 ]]; then

@@ -23,6 +23,10 @@ Options:
   --no-look       Skip GNOME theme / wallpaper / Papirus (terminal stack still installs)
   --pentest       Install optional lab / pentest tools (nmap, wireshark, ...)
   --hyprland      Install an optional Hyprland session (GNOME stays default)
+  --ai            Prepare local AI dirs; detect GPU; no CUDA on Intel
+  --gaming        Prepare game/mod dirs; does not install Steam/Godot/Blender
+  --languages     Optional Rust / Go / JDK from apt if missing
+  --virt          Optional QEMU/KVM + virt-manager
   --dry-run       Print actions without changing the system
   --yes, -y       Assume "yes" for confirmation prompts
   --help, -h      Show this help
@@ -44,6 +48,10 @@ SKIP_PYTHON=0
 SKIP_LOOK=0
 ENABLE_PENTEST=0
 ENABLE_HYPRLAND=0
+ENABLE_AI=0
+ENABLE_GAMING=0
+ENABLE_LANGUAGES=0
+ENABLE_VIRT=0
 INSTALL_PROFILE="full"
 
 while [[ $# -gt 0 ]]; do
@@ -64,6 +72,10 @@ while [[ $# -gt 0 ]]; do
     --no-look) SKIP_LOOK=1; shift ;;
     --pentest) ENABLE_PENTEST=1; shift ;;
     --hyprland) ENABLE_HYPRLAND=1; shift ;;
+    --ai) ENABLE_AI=1; shift ;;
+    --gaming) ENABLE_GAMING=1; shift ;;
+    --languages) ENABLE_LANGUAGES=1; shift ;;
+    --virt) ENABLE_VIRT=1; shift ;;
     --dry-run) DRY_RUN=1; shift ;;
     --yes|-y) ASSUME_YES=1; shift ;;
     --help|-h) usage; exit 0 ;;
@@ -76,7 +88,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 export DRY_RUN ASSUME_YES INSTALL_PROFILE SKIP_GNOME SKIP_DOCKER SKIP_NODE SKIP_PYTHON SKIP_LOOK
-export ENABLE_PENTEST ENABLE_HYPRLAND
+export ENABLE_PENTEST ENABLE_HYPRLAND ENABLE_AI ENABLE_GAMING ENABLE_LANGUAGES ENABLE_VIRT
 
 print_banner() {
   printf '%s\n' "${C_BOLD}${C_CYAN}"
@@ -103,6 +115,10 @@ source_modules() {
     "${REPO_ROOT}/packages/look.sh" \
     "${REPO_ROOT}/packages/pentest.sh" \
     "${REPO_ROOT}/packages/hyprland.sh" \
+    "${REPO_ROOT}/packages/languages.sh" \
+    "${REPO_ROOT}/packages/ai.sh" \
+    "${REPO_ROOT}/packages/gaming.sh" \
+    "${REPO_ROOT}/packages/virt.sh" \
     "${REPO_ROOT}/modules/shell.sh" \
     "${REPO_ROOT}/modules/git.sh" \
     "${REPO_ROOT}/modules/terminal.sh" \
@@ -113,6 +129,8 @@ source_modules() {
     "${REPO_ROOT}/modules/performance.sh" \
     "${REPO_ROOT}/modules/projects.sh" \
     "${REPO_ROOT}/modules/hyprland.sh" \
+    "${REPO_ROOT}/modules/ai.sh" \
+    "${REPO_ROOT}/modules/gaming.sh" \
     "${REPO_ROOT}/modules/health.sh"
   do
     # shellcheck disable=SC1090
@@ -174,6 +192,12 @@ main() {
 
   log_step 7 "${INSTALL_TOTAL_STEPS}" "Configuring development tools"
   install_development_packages
+  install_optional_languages
+  install_ai_packages
+  configure_ai
+  install_gaming_packages
+  configure_gaming
+  install_virt_packages
   configure_performance
 
   log_step 8 "${INSTALL_TOTAL_STEPS}" "Configuring project directories"

@@ -32,6 +32,11 @@ if [[ -f "${UBUNTU_DOTFILES_ROOT}/theme/palette.env" ]]; then
   . "${UBUNTU_DOTFILES_ROOT}/theme/palette.env"
 fi
 
+if [[ -f "${XDG_CONFIG_HOME:-${HOME}/.config}/ubuntu-dotfiles/ai.env" ]]; then
+  # shellcheck disable=SC1091
+  . "${XDG_CONFIG_HOME:-${HOME}/.config}/ubuntu-dotfiles/ai.env"
+fi
+
 if [[ -f "${UBUNTU_DOTFILES_ROOT}/terminal/fzf.env" ]]; then
   # shellcheck disable=SC1091
   . "${UBUNTU_DOTFILES_ROOT}/terminal/fzf.env"

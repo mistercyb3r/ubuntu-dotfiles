@@ -8,7 +8,7 @@ gnome_apply_settings() {
   # Appearance
   _gset org.gnome.desktop.interface color-scheme "'prefer-dark'"
   _gset org.gnome.desktop.interface gtk-theme "'Yaru-dark'"
-  _gset org.gnome.desktop.interface icon-theme "'Yaru'"
+  _gset org.gnome.desktop.interface accent-color "'teal'"
   _gset org.gnome.desktop.interface monospace-font-name "'JetBrains Mono 12'"
   _gset org.gnome.desktop.interface enable-hot-corners "false"
   _gset org.gnome.desktop.interface clock-show-weekday "true"
@@ -91,8 +91,8 @@ gnome_apply_dock() {
 
   _gset org.gnome.shell.extensions.dash-to-dock custom-theme-shrink "true"
   _gset org.gnome.shell.extensions.dash-to-dock transparency-mode "'FIXED'"
-  _gset org.gnome.shell.extensions.dash-to-dock background-opacity "0.55"
-  _gset org.gnome.shell.extensions.dash-to-dock dash-max-icon-size "32"
+  _gset org.gnome.shell.extensions.dash-to-dock background-opacity "0.72"
+  _gset org.gnome.shell.extensions.dash-to-dock dash-max-icon-size "36"
   _gset org.gnome.shell.extensions.dash-to-dock running-indicator-style "'DOTS'"
   _gset org.gnome.shell.extensions.dash-to-dock click-action "'minimize-or-previews'"
   _gset org.gnome.shell.extensions.dash-to-dock isolate-workspaces "true"
@@ -106,7 +106,7 @@ gnome_apply_dock() {
 }
 
 _gnome_keyboard_shortcuts() {
-  # Super+T → default terminal (installer sets that to Kitty)
+  # Super+T → default terminal (installer sets that to Ptyxis)
   _gset org.gnome.settings-daemon.plugins.media-keys terminal "['<Super>t']"
 
   # Super+E → Files (usually already bound; set explicitly)

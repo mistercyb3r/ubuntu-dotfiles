@@ -1,41 +1,54 @@
-# Workstation palette
+# Nordic design system
 
-One dark blue-black language for the whole machine. Inspired by Tokyo Night and Catppuccin, not a copy of either.
+Source of truth: `theme/palette.env`. Do not invent hex values in app configs.
 
-Aesthetic: premium modern Linux developer workstation. Dark, clean, readable. Not neon, not a 2010 hacker movie.
+## Tokens
 
-Source of truth for scripts: `theme/palette.env`
+| Token | Hex | Role |
+|-------|-----|------|
+| `UDF_POLAR_DARKEST` | `#1F232B` | Wallpaper depth, deepest chrome |
+| `UDF_POLAR_DARKER` | `#242933` | Elevated surfaces |
+| `UDF_POLAR_DARK` / `UDF_BG` | `#2E3440` | Terminal / window background |
+| `UDF_SNOW` / `UDF_FG` | `#D8DEE9` | Primary text |
+| `UDF_SNOW_BRIGHT` / `UDF_BRIGHT` | `#ECEFF4` | Bright text, ANSI 15 |
+| `UDF_MUTED` | `#4C566A` | Terminal separators, comments |
+| `UDF_MUTED_UI` | `#7B88A1` | Desktop secondary labels |
+| `UDF_FROST_BLUE` / `UDF_BLUE` | `#81A1C1` | Accent, Docker, k8s |
+| `UDF_FROST_CYAN` / `UDF_CYAN` | `#88C0D0` | Directory, prompt rails, cursor |
+| `UDF_FROST_LIGHT` | `#8FBCBB` | Soft highlight |
+| `UDF_AURORA_GREEN` / `UDF_GREEN` | `#A3BE8C` | Success |
+| `UDF_AURORA_YELLOW` / `UDF_YELLOW` | `#EBCB8B` | Warning, git dirty |
+| `UDF_AURORA_RED` / `UDF_RED` | `#BF616A` | Error |
+| `UDF_AURORA_PURPLE` / `UDF_PURPLE` | `#B48EAD` | Username, git branch |
+| `UDF_OPACITY` | `0.92` | Ptyxis window opacity |
 
-| Token | Hex | Use |
-|-------|-----|-----|
-| `UDF_BG` | `#0B0E14` | Kitty / tmux / Waybar / Yazi background |
-| `UDF_FG` | `#D8DEE9` | Primary text |
-| `UDF_CYAN` | `#7DCFFF` | Directory, prompt rails, Kitty cursor, accents |
-| `UDF_BLUE` | `#7AA2F7` | Docker, Kubernetes, URLs |
-| `UDF_PURPLE` | `#BB9AF7` | Username, Git branch, titles |
-| `UDF_GREEN` | `#9ECE6A` | Success `❯`, valid commands, Node |
-| `UDF_RED` | `#F7768E` | Failed `❯`, invalid commands, root |
-| `UDF_YELLOW` | `#E0AF68` | Git dirty, duration, Python, warnings |
-| `UDF_MUTED` | `#565F89` | Separators, suggestions, inactive chrome |
-| `UDF_SELECTION` | `#1A2744` | Selection (subtle dark blue, not neon) |
-| `UDF_CURSOR` | `#7DCFFF` | Caret |
-| `UDF_SURFACE` | `#12161F` | Inactive tabs, tmux messages |
-| `UDF_BORDER` | `#1C2230` | Inactive borders |
-| `UDF_BRIGHT` | `#ECEFF4` | Bright white (ANSI 15) |
+`UDF_MUTED` stays Polar Night `#4C566A` for terminal contrast. `UDF_MUTED_UI` is the lighter desktop grey.
 
-## Where each colour is used
+## Where it is applied
 
-| App | File |
-|-----|------|
-| Kitty | `terminal/kitty.conf` |
+| Surface | File |
+|---------|------|
+| Ptyxis | `terminal/ptyxis/Workstation.palette` |
 | Starship | `terminal/starship.toml` |
-| tmux | `terminal/tmux.conf` |
-| fzf | `terminal/fzf.env` (reads `palette.env`) |
-| Yazi | `terminal/yazi/theme.toml` |
-| Fastfetch | `terminal/fastfetch.jsonc` (ANSI keys → Kitty palette) |
-| Zsh highlight / suggestions | `shell/plugins.zsh` (reads `palette.env`) |
-| GNOME Terminal | `gnome/look.sh` |
-| Hyprland | `hyprland/hyprland.conf` |
+| Fastfetch | ANSI cyan / magenta → Ptyxis Nord |
+| tmux / fzf / Yazi | `terminal/` |
+| GTK 4 / 3 | `theme/gtk-4.0.css`, `theme/gtk-3.0.css` |
+| Wallpaper | `theme/wallpapers/nordic-polar.svg` |
+| GNOME accent | teal (closest shipped frost) |
 | Waybar | `hyprland/waybar/style.css` |
+
+## Ptyxis mapping
+
+| palette.env | Ptyxis `.palette` |
+|-------------|-------------------|
+| `UDF_BG` | `Background` |
+| `UDF_FG` | `Foreground` |
+| `UDF_RED` | `Color1` / `Color9` |
+| `UDF_GREEN` | `Color2` / `Color10` |
+| `UDF_YELLOW` | `Color3` / `Color11` |
+| `UDF_BLUE` | `Color4` / `Color12` |
+| `UDF_PURPLE` | `Color5` / `Color13` |
+| `UDF_CYAN` | `Color6` / `Color14` |
+| `UDF_OPACITY` | profile `opacity` |
 
 Verify: `theme-health` or `dotfiles-health`.

@@ -22,8 +22,8 @@ ubuntu-dotfiles/
 ├── modules/                Apply configuration (shell, git, ssh, gnome, …)
 ├── shell/                  Zsh files sourced from ~/.zshrc
 ├── git/                    Shared gitconfig (no identity)
-├── terminal/               Starship, tmux, Fastfetch, Kitty, Yazi, fzf
-├── theme/                  Shared colour palette
+├── terminal/               Starship, tmux, Fastfetch, Ptyxis, Yazi, fzf
+├── theme/                  Nordic palette, GTK CSS, wallpaper
 ├── hyprland/               Optional session (./install.sh --hyprland)
 ├── gnome/                  gsettings, look theme, extension policy
 ├── ssh/                    Example client config (placeholders)
@@ -32,6 +32,8 @@ ubuntu-dotfiles/
 ├── templates/              new-project scaffolds
 └── docs/
 ```
+
+Optional installer flags (existing modules, not a rewrite): `--ai`, `--gaming`, `--languages`, `--virt`, `--pentest`, `--hyprland`.
 
 ## User vs system
 

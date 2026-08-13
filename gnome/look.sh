@@ -3,19 +3,19 @@
 # Uses only Ubuntu-shipped themes (Yaru, Papirus) and dconf/gsettings.
 
 gnome_apply_look() {
-  log_info "Applying GNOME look (Yaru purple + Papirus, dark wallpaper)"
+  log_info "Applying GNOME look (Nordic Yaru + Papirus, polar wallpaper)"
 
   if ! command_exists gsettings; then
     log_skip "gsettings not found"
     return 0
   fi
 
-  # Accent + Yaru colour variant when present (Ubuntu 23.10+).
+  # Frost teal is the closest shipped GNOME accent to the Nordic palette.
+  # Do not install a full custom GTK theme — libadwaita on GNOME 50 breaks those.
   _gset org.gnome.desktop.interface color-scheme "'prefer-dark'"
-  _gset org.gnome.desktop.interface accent-color "'purple'"
-  if gsettings range org.gnome.desktop.interface gtk-theme 2>/dev/null | grep -q Yaru-purple-dark \
-    || [[ -d /usr/share/themes/Yaru-purple-dark ]]; then
-    _gset org.gnome.desktop.interface gtk-theme "'Yaru-purple-dark'"
+  _gset org.gnome.desktop.interface accent-color "'teal'"
+  if [[ -d /usr/share/themes/Yaru-teal-dark ]]; then
+    _gset org.gnome.desktop.interface gtk-theme "'Yaru-teal-dark'"
   else
     _gset org.gnome.desktop.interface gtk-theme "'Yaru-dark'"
   fi
@@ -27,6 +27,7 @@ gnome_apply_look() {
   fi
 
   _gset org.gnome.desktop.interface cursor-theme "'Yaru'"
+  _look_set_ui_font
   if fc-list 2>/dev/null | grep -qi 'JetBrainsMono Nerd Font'; then
     _gset org.gnome.desktop.interface monospace-font-name "'JetBrainsMono Nerd Font 12'"
   else
@@ -38,21 +39,35 @@ gnome_apply_look() {
   _look_set_wallpaper
 }
 
+_look_set_ui_font() {
+  # Prefer a font already on Ubuntu. Inter only if the archive package was installed.
+  if fc-list 2>/dev/null | grep -qi 'Ubuntu Sans'; then
+    _gset org.gnome.desktop.interface font-name "'Ubuntu Sans 11'"
+    _gset org.gnome.desktop.interface document-font-name "'Ubuntu Sans 11'"
+  elif fc-list 2>/dev/null | grep -qi '^Inter:'; then
+    _gset org.gnome.desktop.interface font-name "'Inter 11'"
+    _gset org.gnome.desktop.interface document-font-name "'Inter 11'"
+  fi
+}
+
 _look_set_wallpaper() {
-  local dest="${XDG_DATA_HOME:-${HOME}/.local/share}/backgrounds/ubuntu-dotfiles-mocha.jpg"
-  local url="https://raw.githubusercontent.com/catppuccin/wallpapers/main/os/ubuntu.png"
+  local dest="${XDG_DATA_HOME:-${HOME}/.local/share}/backgrounds/ubuntu-dotfiles-nordic.svg"
+  local src="${REPO_ROOT:-}/theme/wallpapers/nordic-polar.svg"
   local wp=""
 
-  if [[ -f "${dest}" ]]; then
-    wp="${dest}"
-  elif ! is_dry_run && command_exists curl; then
-    mkdir -p "$(dirname "${dest}")"
-    if curl -fsSL "${url}" -o "${dest}"; then
+  if [[ -z "${REPO_ROOT:-}" ]]; then
+    src="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/theme/wallpapers/nordic-polar.svg"
+  fi
+
+  if [[ -f "${src}" ]]; then
+    if is_dry_run; then
+      log_dry "install wallpaper ${src} -> ${dest}"
       wp="${dest}"
-      log_success "Downloaded Catppuccin Ubuntu wallpaper"
+    else
+      mkdir -p "$(dirname "${dest}")"
+      install_file "${src}" "${dest}"
+      wp="${dest}"
     fi
-  elif is_dry_run; then
-    log_dry "download wallpaper ${url} -> ${dest}"
   fi
 
   if [[ -z "${wp}" ]]; then
@@ -74,13 +89,14 @@ _look_set_wallpaper() {
     _gset org.gnome.desktop.background picture-uri "'file://${wp}'"
     _gset org.gnome.desktop.background picture-uri-dark "'file://${wp}'"
     _gset org.gnome.desktop.background picture-options "'zoom'"
+    _gset org.gnome.desktop.background primary-color "'#1F232B'"
     log_success "Wallpaper: ${wp}"
   else
     log_skip "No wallpaper found; left the current one"
   fi
 }
 
-# Same palette as Kitty (theme/palette.md). Fallback if Super+T is not Kitty.
+# Same Nord palette as Ptyxis (theme/palette.md). Fallback only.
 gnome_apply_terminal_theme() {
   if ! command_exists gsettings; then
     return 0
@@ -101,15 +117,15 @@ gnome_apply_terminal_theme() {
   log_info "Theming GNOME Terminal profile ${id} (workstation palette, zsh)"
 
   _gset_rel "${schema}" use-theme-colors "false"
-  _gset_rel "${schema}" background-color "'#0B0E14'"
+  _gset_rel "${schema}" background-color "'#2E3440'"
   _gset_rel "${schema}" foreground-color "'#D8DEE9'"
   _gset_rel "${schema}" cursor-colors-set "true"
-  _gset_rel "${schema}" cursor-background-color "'#7DCFFF'"
-  _gset_rel "${schema}" cursor-foreground-color "'#0B0E14'"
+  _gset_rel "${schema}" cursor-background-color "'#88C0D0'"
+  _gset_rel "${schema}" cursor-foreground-color "'#2E3440'"
   _gset_rel "${schema}" bold-color-same-as-fg "true"
-  _gset_rel "${schema}" palette "['#0B0E14', '#F7768E', '#9ECE6A', '#E0AF68', '#7AA2F7', '#BB9AF7', '#7DCFFF', '#D8DEE9', '#565F89', '#F7768E', '#9ECE6A', '#E0AF68', '#7AA2F7', '#BB9AF7', '#7DCFFF', '#ECEFF4']"
+  _gset_rel "${schema}" palette "['#3B4252', '#BF616A', '#A3BE8C', '#EBCB8B', '#81A1C1', '#B48EAD', '#88C0D0', '#D8DEE9', '#4C566A', '#BF616A', '#A3BE8C', '#EBCB8B', '#81A1C1', '#B48EAD', '#88C0D0', '#ECEFF4']"
   _gset_rel "${schema}" use-transparent-background "true"
-  _gset_rel "${schema}" background-transparency-percent "6"
+  _gset_rel "${schema}" background-transparency-percent "8"
   _gset_rel "${schema}" use-system-font "false"
   if fc-list 2>/dev/null | grep -qi 'JetBrainsMono Nerd Font'; then
     _gset_rel "${schema}" font "'JetBrainsMono Nerd Font 12'"

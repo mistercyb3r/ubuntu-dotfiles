@@ -55,6 +55,13 @@ APT_CORE_OPTIONAL=(
   wl-clipboard
   plocate
   fonts-firacode
+  ncdu
+  mtr-tiny
+  traceroute
+  whois
+  smartmontools
+  lazygit
+  shfmt
 )
 
 install_apt_packages() {

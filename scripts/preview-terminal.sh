@@ -105,7 +105,7 @@ cat <<EOF
   dotfiles-health
   zsh-bench
   echo "\$SHELL  \$0"
-  command -v zsh starship fastfetch kitty zoxide fzf
+  command -v zsh starship fastfetch ptyxis zoxide fzf
   fc-list | grep -i 'JetBrainsMono Nerd'
-  Super+T  →  Kitty should open zsh with Fastfetch then the two-line prompt
+  Super+T  →  Ptyxis should open zsh with Fastfetch then the two-line prompt
 EOF

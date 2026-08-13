@@ -45,7 +45,7 @@ Priorities: stability, responsiveness, battery life, developer productivity. No 
 
 Core tools from Ubuntu repositories where possible:
 
-Zsh, Starship, Fastfetch, Kitty, JetBrainsMono Nerd Font, git, GitHub CLI (`gh`), OpenSSH **client**, build-essential, fzf, ripgrep, fd, bat, eza, zoxide, jq, tree, btop, htop, tmux, curl, wget, unzip, Python 3, pipx, uv, nvm + Node.js LTS.
+Zsh, Starship, Fastfetch, Ptyxis, JetBrainsMono Nerd Font, git, GitHub CLI (`gh`), OpenSSH **client**, build-essential, fzf, ripgrep, fd, bat, eza, zoxide, jq, tree, btop, htop, tmux, curl, wget, unzip, Python 3, pipx, uv, nvm + Node.js LTS.
 
 Optional (full profile): Docker Engine, Tailscale package, GNOME look. Optional flags: `--pentest`, `--hyprland`.
 
@@ -57,10 +57,11 @@ See [docs/installed-software.md](docs/installed-software.md) for why each tool e
 |------|-----------|
 | Shell | Zsh + **Starship only** (no Oh My Zsh theme); marked block in `~/.zshrc` |
 | Git | Shared defaults via `include.path`; **no** name/email in the repo |
-| Terminal | Kitty + Fastfetch + two-line Starship. [docs/terminal.md](docs/terminal.md) |
+| Terminal | Ptyxis + Fastfetch + two-line Starship. [docs/terminal.md](docs/terminal.md) |
 | SSH | Client defaults + example host file; **no** `sshd` |
 | GNOME | Dark Yaru, Papirus, centred **bottom dock** that hides in fullscreen |
-| Look | One palette across Kitty, Starship, Fastfetch, tmux, fzf, Yazi. [docs/look.md](docs/look.md) |
+| Look | Nordic design system: GNOME, GTK, Papirus, Ptyxis, Starship, Fastfetch. [docs/look.md](docs/look.md) |
+| Research | Why each extra tool/extension is skipped or optional. [docs/research.md](docs/research.md) |
 | Projects | `~/Projects/{personal,ai,web,python,homelab,security,games,experiments}` |
 | Performance | zram, SSD TRIM, `power-profiles-daemon` balanced |
 | Backups | Timestamped copies under `~/.local/share/ubuntu-dotfiles/backups/` |
@@ -111,6 +112,10 @@ Useful options:
 --no-look       skip GNOME wallpaper / Papirus (terminal stack still installs)
 --pentest       optional lab tools (nmap, wireshark, ...)
 --hyprland      optional Hyprland session (GNOME stays default)
+--ai            local AI dirs + GPU detect (no CUDA on Intel)
+--gaming        game/mod dirs (does not install Steam/Godot)
+--languages     Rust / Go / JDK from apt if missing
+--virt          QEMU/KVM + virt-manager
 --dry-run       print actions only
 --yes           assume yes for prompts (still will not log into Tailscale)
 ```

@@ -12,7 +12,10 @@ git pull
 
 | Piece | Role |
 |-------|------|
-| **Kitty** | Primary terminal, workstation palette |
+| **Ptyxis** | Default terminal, Nordic palette, 92% opacity |
+| **Papirus-Dark** | Application / folder / MIME icons |
+| **Yaru-dark + teal accent** | GNOME 50 / libadwaita-safe theme |
+| **Nordic wallpaper** | `theme/wallpapers/nordic-polar.svg` |
 | **JetBrainsMono Nerd Font** | Icons in prompt and `eza` |
 | **Starship** | Two-line prompt (see [terminal.md](terminal.md)) |
 | **Fastfetch** | Supported system-info greeting |
@@ -25,13 +28,17 @@ Not installed on purpose:
 
 - **Hyprland** unless you pass `--hyprland`
 - **Oh My Zsh themes**
-- **Blur my Shell** (stutters on Intel UHD 620)
+- **Blur my Shell** (stutters on Intel UHD 620; conflicts with Ubuntu Dock)
 - Theme PPAs and `curl | sh` rices
+- Extra GNOME extensions from extensions.gnome.org
+
+Research notes: [research.md](research.md).
 
 ## Everyday commands
 
 ```bash
-# Super+T  →  Kitty (zsh + Fastfetch + two-line prompt)
+# Super+T  →  Ptyxis (zsh + Fastfetch + two-line prompt)
+# Desktop  →  dark Yaru, Papirus, polar wallpaper
 fetch              # Fastfetch again
 preview-terminal   # show the intended look
 dotfiles-health    # green / yellow / red proof
@@ -59,5 +66,5 @@ bash gnome/dock.sh
 
 1. `git pull && ./install.sh`
 2. Log out and back in
-3. Super+T → Kitty
+3. Super+T → Ptyxis
 4. Empty-box icons → log out once more after the font cache updates

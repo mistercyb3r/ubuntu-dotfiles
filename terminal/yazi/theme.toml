@@ -1,23 +1,28 @@
 # Colours from theme/palette.env
 
 [manager]
-cwd = { fg = "#7DCFFF", bold = true }
+cwd = { fg = "#88C0D0", bold = true }
 
-hovered = { fg = "#D8DEE9", bg = "#1A2744" }
+hovered = { fg = "#D8DEE9", bg = "#3B4252" }
 preview_hovered = { underline = true }
+find_keyword = { fg = "#EBCB8B", bold = true }
+find_position = { fg = "#B48EAD", italic = true }
 
 [status]
 separator_open = ""
 separator_close = ""
-mode_normal = { fg = "#0B0E14", bg = "#7DCFFF", bold = true }
-mode_select = { fg = "#0B0E14", bg = "#BB9AF7", bold = true }
-mode_unset = { fg = "#0B0E14", bg = "#E0AF68", bold = true }
+mode_normal = { fg = "#2E3440", bg = "#88C0D0", bold = true }
+mode_select = { fg = "#2E3440", bg = "#B48EAD", bold = true }
+mode_unset = { fg = "#2E3440", bg = "#EBCB8B", bold = true }
 
 [filetype]
 rules = [
-  { mime = "image/*", fg = "#BB9AF7" },
-  { mime = "video/*", fg = "#7AA2F7" },
-  { mime = "audio/*", fg = "#9ECE6A" },
-  { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#E0AF68" },
-  { mime = "application/{pdf,doc,rtf}", fg = "#7DCFFF" },
+  { mime = "image/*", fg = "#B48EAD" },
+  { mime = "video/*", fg = "#81A1C1" },
+  { mime = "audio/*", fg = "#A3BE8C" },
+  { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#EBCB8B" },
+  { mime = "application/{pdf,doc,rtf}", fg = "#88C0D0" },
+  { mime = "text/*", fg = "#D8DEE9" },
+  { mime = "application/json", fg = "#8FBCBB" },
+  { name = "*/", fg = "#81A1C1", bold = true },
 ]

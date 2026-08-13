@@ -71,6 +71,40 @@ else
   echo "sudo keepalive trap uses the safe helper."
 fi
 
+echo "Checking Kitty is not an installer or config target..."
+if grep -nE '^[[:space:]]*kitty[[:space:]]*$' "${ROOT}/packages/"*.sh 2>/dev/null; then
+  echo "FAIL: kitty is still listed as a package to install"
+  fail=1
+else
+  echo "packages/ does not list kitty."
+fi
+if [[ -f "${ROOT}/terminal/kitty.conf" ]]; then
+  echo "FAIL: terminal/kitty.conf should be removed (Ptyxis is the default terminal)"
+  fail=1
+else
+  echo "terminal/kitty.conf is gone."
+fi
+if grep -nE '_terminal_prefer_kitty|kitty\.conf|/usr/bin/kitty' \
+  "${ROOT}/modules/"*.sh "${ROOT}/packages/"*.sh "${ROOT}/gnome/"*.sh \
+  "${ROOT}/install.sh" 2>/dev/null; then
+  echo "FAIL: installer still configures Kitty"
+  fail=1
+else
+  echo "Installer modules do not configure Kitty."
+fi
+if [[ ! -f "${ROOT}/terminal/ptyxis/Workstation.palette" ]]; then
+  echo "FAIL: missing ${ROOT}/terminal/ptyxis/Workstation.palette"
+  fail=1
+else
+  echo "Ptyxis palette file is present."
+fi
+if ! grep -q 'install_ptyxis' "${ROOT}/packages/terminal.sh"; then
+  echo "FAIL: packages/terminal.sh does not install Ptyxis"
+  fail=1
+else
+  echo "packages/terminal.sh installs Ptyxis."
+fi
+
 echo "Checking Fastfetch 2.57 display keys in terminal/fastfetch.jsonc..."
 _ff_cfg="${ROOT}/terminal/fastfetch.jsonc"
 if [[ ! -f "${_ff_cfg}" ]]; then
@@ -81,6 +115,12 @@ elif grep -E '^[[:space:]]*"keyWidth"' "${_ff_cfg}"; then
   fail=1
 else
   echo "No unsupported top-level display.keyWidth."
+fi
+if ! grep -q '"width"' "${_ff_cfg}"; then
+  echo "FAIL: terminal/fastfetch.jsonc must keep display.key.width for Fastfetch 2.57.1"
+  fail=1
+else
+  echo "display.key.width is present."
 fi
 if command -v fastfetch >/dev/null 2>&1; then
   _ff_out=""
@@ -100,6 +140,14 @@ if command -v fastfetch >/dev/null 2>&1; then
   unset _ff_out _ff_rc
 else
   echo "fastfetch not installed here; skipped live config parse (run on Ubuntu 26.04)"
+fi
+
+echo "Checking theme/palette.env mapping (theme-health)..."
+if ! bash "${ROOT}/scripts/theme-health.sh"; then
+  echo "FAIL: theme-health reported a palette mismatch"
+  fail=1
+else
+  echo "theme-health: OK"
 fi
 
 if command -v shellcheck >/dev/null 2>&1; then

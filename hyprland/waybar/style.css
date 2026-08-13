@@ -5,23 +5,23 @@
 }
 
 window#waybar {
-  background: #0B0E14;
-  border-bottom: 1px solid #1C2230;
+  background: #2E3440;
+  border-bottom: 1px solid #434C5E;
 }
 
 #workspaces button {
-  color: #565F89;
+  color: #4C566A;
   padding: 0 8px;
 }
 
 #workspaces button.active {
-  color: #0B0E14;
-  background: #7DCFFF;
+  color: #2E3440;
+  background: #88C0D0;
 }
 
 #clock, #cpu, #memory, #battery, #network {
   padding: 0 8px;
 }
 
-#battery.warning { color: #E0AF68; }
-#battery.critical { color: #F7768E; }
+#battery.warning { color: #EBCB8B; }
+#battery.critical { color: #BF616A; }

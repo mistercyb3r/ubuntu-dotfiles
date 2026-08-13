@@ -16,12 +16,15 @@ Installed only when the Ubuntu archive has the package (or Starship's official G
 | **yq** | YAML for compose / Caddy / k8s (skipped if not packaged) |
 | **btop** | Resource view on 16 GB; `htop` remains as fallback |
 | **fastfetch** | Supported system-info greeting. Ubuntu 26.04: `universe` package. Older: official GitHub .deb. |
+| **lazygit** | TUI git (`lg`) when packaged |
+| **ncdu** | Interactive disk usage (`ducks`) |
+| **shfmt** | Shell formatter when packaged |
 | **tealdeer / tldr** | Short examples (`tldr tar`) |
 | **yazi** | Terminal file manager (`y`). Skipped if not packaged. |
 | **duf** | Readable `df` for disks |
 | **git-delta** | Readable diffs; Git pager when present |
 | **tmux** | Persistent sessions; not auto-started |
-| **Kitty** | One GPU terminal. Not five emulators. |
+| **Ptyxis** | Ubuntu’s default terminal. One emulator, not five. |
 
 ## Not installed on purpose
 
@@ -33,7 +36,7 @@ Installed only when the Ubuntu archive has the package (or Starship's official G
 | **zellij** | tmux is already configured and familiar over SSH. |
 | **Oh My Zsh themes** | Fight Starship and look like 2018 Ubuntu tutorials. |
 | **Powerlevel10k** | Heavy; Starship is the prompt. |
-| **Five terminal emulators** | Kitty + GNOME Terminal fallback only. |
+| **Five terminal emulators** | Ptyxis + GNOME Terminal fallback only. |
 
 ## Homelab helpers (no secrets)
 

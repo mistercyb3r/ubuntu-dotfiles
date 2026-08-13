@@ -9,9 +9,11 @@ configure_look() {
     return 0
   fi
 
-  log_info "Applying desktop look (dark Yaru, Papirus, shared palette)"
+  log_info "Applying desktop look (Nordic Yaru, Papirus, shared palette)"
 
   _look_install_nerd_font
+  _look_install_gtk_css
+  _look_recolor_papirus_folders
 
   if [[ "${SKIP_GNOME:-0}" != "1" ]]; then
     # shellcheck disable=SC1091
@@ -23,7 +25,32 @@ configure_look() {
   fi
 
   state_append_list "MODULES" "look"
-  log_success "Desktop look applied. Super+T should open Kitty + zsh + Fastfetch."
+  log_success "Desktop look applied. Super+T should open Ptyxis + zsh + Fastfetch."
+}
+
+_look_install_gtk_css() {
+  local gtk4="${XDG_CONFIG_HOME}/gtk-4.0"
+  local gtk3="${XDG_CONFIG_HOME}/gtk-3.0"
+  mkdir -p "${gtk4}" "${gtk3}"
+  install_file "${REPO_ROOT}/theme/gtk-4.0.css" "${gtk4}/gtk.css"
+  install_file "${REPO_ROOT}/theme/gtk-3.0.css" "${gtk3}/gtk.css"
+}
+
+_look_recolor_papirus_folders() {
+  if ! command_exists papirus-folders; then
+    return 0
+  fi
+  if is_dry_run; then
+    log_dry "papirus-folders -C nordic --theme Papirus-Dark"
+    return 0
+  fi
+  if papirus-folders -l --theme Papirus-Dark 2>/dev/null | grep -qi nordic; then
+    papirus-folders -C nordic --theme Papirus-Dark >/dev/null 2>&1 || true
+    log_success "Papirus folder colour: nordic"
+  elif papirus-folders -l --theme Papirus-Dark 2>/dev/null | grep -qi grey; then
+    papirus-folders -C grey --theme Papirus-Dark >/dev/null 2>&1 || true
+    log_success "Papirus folder colour: grey"
+  fi
 }
 
 _look_install_nerd_font() {

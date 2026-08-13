@@ -6,7 +6,7 @@ This was written by inspecting the repository, not by running the installer on W
 
 | Expected | What often happened |
 |----------|---------------------|
-| Kitty + Nerd Font + Starship two-line prompt | Super+T or Ctrl+Alt+T still opened **GNOME Terminal + bash** |
+| Ptyxis + Nerd Font + Starship two-line prompt | Super+T or Ctrl+Alt+T still opened **GNOME Terminal + bash** |
 | Fastfetch greeting | older installs preferred the legacy fetch tool (often missing) or nothing |
 | Starship | `ZSH_THEME=robbyrussell` fallback = classic Oh My Zsh, looks like a tutorial from 2018 |
 | JetBrainsMono Nerd Font | Installed under `~/.local/share/fonts` but the open terminal still used **Ubuntu Mono / JetBrains Mono without icons** |
@@ -27,5 +27,5 @@ This was written by inspecting the repository, not by running the installer on W
 - One prompt: **Starship only**. Oh My Zsh is not sourced for appearance.
 - One greeting: **Fastfetch**, local interactive top-level shells only (not tmux, not SSH).
 - Terminal visuals are **core**, not an optional look extra.
-- Kitty is the Super+T terminal and is forced to `/usr/bin/zsh` + Nerd Font.
+- Ptyxis is the Super+T terminal (Nord palette, slight transparency) and uses zsh + Nerd Font.
 - `preview-terminal` and `dotfiles-health` prove the stack on the laptop.

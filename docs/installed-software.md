@@ -63,8 +63,10 @@ If `docker` is already on `PATH`, it is **not** replaced.
 | `fonts-jetbrains-mono` | Default programming font |
 | `fonts-firacode` | Optional ligature font, if packaged |
 | `gnome-tweaks` | Full profile only; settings UI. No extension dump |
-| `papirus-icon-theme` | Dark icon set for the look profile |
-| `kitty` | GPU terminal; Super+T default |
+| `papirus-icon-theme` | Dark icon set (Papirus-Dark) |
+| `papirus-folders` | Nordic folder colour when packaged |
+| `fonts-inter` | Optional UI font if Ubuntu Sans is missing |
+| `ptyxis` | Default Ubuntu terminal; Super+T default |
 | `zsh-autosuggestions` | Grey ghost-text; right-arrow accepts |
 | `zsh-syntax-highlighting` | Green valid / red invalid commands |
 | `zoxide` | Fast directory jumper (`z`) |

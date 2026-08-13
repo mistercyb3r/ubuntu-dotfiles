@@ -13,6 +13,7 @@ if command -v eza >/dev/null 2>&1; then
   alias ll='eza -l --group-directories-first --git --header --icons'
   alias la='eza -la --group-directories-first --git --header --icons'
   alias lt='eza -T --level=2 --group-directories-first --icons'
+  alias tree='eza -T --level=2 --group-directories-first --icons'
 else
   alias ls='ls --color=auto --group-directories-first'
   alias ll='ls -lh --color=auto --group-directories-first'
@@ -37,6 +38,18 @@ fi
 
 if command -v rg >/dev/null 2>&1; then
   alias rg='rg --hidden --glob "!.git"'
+fi
+
+if command -v lazygit >/dev/null 2>&1; then
+  alias lg='lazygit'
+fi
+
+if command -v duf >/dev/null 2>&1; then
+  alias disks='duf'
+fi
+
+if command -v ncdu >/dev/null 2>&1; then
+  alias ducks='ncdu --color dark'
 fi
 
 # Git (short, non-destructive)

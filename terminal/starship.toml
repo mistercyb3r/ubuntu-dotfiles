@@ -8,28 +8,28 @@ command_timeout = 400
 scan_timeout = 30
 
 format = """
-[╭─](bold #7DCFFF) $username$hostname $directory$git_branch$git_status$python$nodejs$rust$docker_context$kubernetes$cmd_duration
-[╰─](bold #7DCFFF)$character"""
+[╭─](bold #88C0D0) $username$hostname $directory$git_branch$git_status$python$nodejs$rust$docker_context$kubernetes$cmd_duration
+[╰─](bold #88C0D0)$character"""
 
 [character]
-success_symbol = "[❯](bold #9ECE6A)"
-error_symbol = "[❯](bold #F7768E)"
+success_symbol = "[❯](bold #A3BE8C)"
+error_symbol = "[❯](bold #BF616A)"
 
 [directory]
-style = "bold #7DCFFF"
+style = "bold #88C0D0"
 truncation_length = 4
 truncate_to_repo = false
 truncation_symbol = "…/"
 home_symbol = "~"
 read_only = " ro"
-format = "[·](#565F89) [$path]($style)[$read_only](#E0AF68) "
+format = "[·](#4C566A) [$path]($style)[$read_only](#EBCB8B) "
 
 [git_branch]
-style = "bold #BB9AF7"
-format = "[·](#565F89) [$branch]($style) "
+style = "bold #B48EAD"
+format = "[·](#4C566A) [$branch]($style) "
 
 [git_status]
-style = "#E0AF68"
+style = "#EBCB8B"
 format = "([$all_status$ahead_behind]($style))"
 conflicted = "≠"
 ahead = "⇡${count}"
@@ -44,49 +44,49 @@ renamed = ">"
 deleted = "x"
 
 [python]
-style = "#E0AF68"
-format = "[·](#565F89) [py $version]($style) "
+style = "#EBCB8B"
+format = "[·](#4C566A) [py $version]($style) "
 python_binary = ["python3", "python"]
 detect_extensions = ["py"]
 detect_files = ["pyproject.toml", "requirements.txt", ".python-version"]
 
 [nodejs]
-style = "#9ECE6A"
-format = "[·](#565F89) [node $version]($style) "
+style = "#A3BE8C"
+format = "[·](#4C566A) [node $version]($style) "
 detect_files = ["package.json", ".nvmrc"]
 
 [rust]
-style = "#E0AF68"
-format = "[·](#565F89) [rs $version]($style) "
+style = "#EBCB8B"
+format = "[·](#4C566A) [rs $version]($style) "
 detect_files = ["Cargo.toml"]
 
 [docker_context]
-style = "#7AA2F7"
-format = "[·](#565F89) [docker]($style) "
+style = "#81A1C1"
+format = "[·](#4C566A) [docker]($style) "
 only_with_files = true
 detect_files = ["docker-compose.yml", "compose.yml", "Dockerfile"]
 
 [kubernetes]
 disabled = false
-style = "#7AA2F7"
-format = "[·](#565F89) [k8s $context]($style) "
+style = "#81A1C1"
+format = "[·](#4C566A) [k8s $context]($style) "
 detect_files = ["kustomization.yaml", "Chart.yaml"]
 
 [username]
-style_user = "bold #BB9AF7"
-style_root = "bold #F7768E"
+style_user = "bold #B48EAD"
+style_root = "bold #BF616A"
 format = "[$user]($style)"
 show_always = true
 
 [hostname]
 ssh_only = false
-style = "bold #7DCFFF"
+style = "bold #88C0D0"
 format = "[@$hostname]($style)"
 
 [cmd_duration]
 min_time = 400
-style = "#E0AF68"
-format = "[·](#565F89) [took $duration]($style) "
+style = "#EBCB8B"
+format = "[·](#4C566A) [took $duration]($style) "
 
 [line_break]
 disabled = true

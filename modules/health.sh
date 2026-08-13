@@ -43,10 +43,14 @@ run_health_checks() {
     log_warn "neofetch is installed but unused. Fastfetch is the greeting. Optional: sudo apt-get remove -y neofetch"
   fi
 
-  if command_exists kitty; then
-    log_success "kitty: $(command -v kitty)"
+  if command_exists ptyxis || [[ -x /usr/bin/ptyxis ]]; then
+    log_success "ptyxis: $(command -v ptyxis || echo /usr/bin/ptyxis)"
   else
-    log_warn "kitty is not on PATH"
+    log_error "ptyxis is not on PATH (default terminal missing)"
+    failed=1
+  fi
+  if command_exists kitty; then
+    log_warn "kitty is installed but unused. Ptyxis is the default terminal."
   fi
 
   if [[ -f "${HOME}/.zshrc" ]] && grep -q 'ubuntu-dotfiles' "${HOME}/.zshrc"; then

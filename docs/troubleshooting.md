@@ -41,11 +41,11 @@ dotfiles-health
 preview-terminal
 ```
 
-Then close every terminal and open a **new** one (Super+T → Kitty). Check:
+Then close every terminal and open a **new** one (Super+T → Ptyxis). Check:
 
 ```bash
 echo "$SHELL $0"
-command -v zsh starship fastfetch kitty
+command -v zsh starship fastfetch ptyxis
 fc-list | grep -i 'JetBrainsMono Nerd'
 ```
 

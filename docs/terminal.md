@@ -21,7 +21,7 @@ See [audit-terminal.md](audit-terminal.md). Short version: an older Oh My Zsh th
 | **Zsh** | Interactive shell. Bash stays installed. |
 | **Starship** | Only prompt. Two lines. Contextual git / language modules. |
 | **Fastfetch** | Greeting once per local top-level interactive session |
-| **Kitty** | Primary emulator (true colour, Nerd Font, padding) |
+| **Ptyxis** | Default Ubuntu terminal (Nord palette, ~92% opacity) |
 | **JetBrainsMono Nerd Font** | Icons. One font family. |
 | **fzf** | CTRL-R history, CTRL-T files |
 | **zoxide** | `z Projects` |
@@ -56,7 +56,7 @@ echo 'export UBUNTU_DOTFILES_NO_FETCH=1' >> ~/.zshrc.local
 
 Home is `~`. Deep paths truncate. Git shows `!` modified, `+` staged, `?` untracked, `⇡`/`⇣` ahead/behind. Python, Node, Rust, Docker, and Kubernetes appear only inside matching projects. SSH adds `user@host`.
 
-Palette: [theme/palette.md](../theme/palette.md).
+Palette: [theme/palette.md](../theme/palette.md). Ptyxis cannot source `palette.env`; the installer copies `terminal/ptyxis/Workstation.palette` and sets the profile `palette` + `opacity` keys.
 
 ## Verify on the laptop
 
@@ -66,7 +66,7 @@ dotfiles-health
 zsh-bench
 echo "$SHELL"
 echo "$0"
-command -v zsh starship fastfetch kitty zoxide fzf
+command -v zsh starship fastfetch ptyxis zoxide fzf
 fc-list | grep -i 'JetBrainsMono Nerd'
 ```
 
@@ -75,7 +75,7 @@ fc-list | grep -i 'JetBrainsMono Nerd'
 1. `cd ~/ubuntu-dotfiles && git pull && ./install.sh`
 2. If login shell is still bash: `chsh -s "$(command -v zsh)"`
 3. Log out and back in (font cache + default terminal)
-4. Super+T should open **Kitty** running **zsh**
+4. Super+T should open **Ptyxis** running **zsh**
 5. If icons are empty boxes, log out once more after `fc-cache -f`
 
 Optional:

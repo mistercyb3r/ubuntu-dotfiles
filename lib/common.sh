@@ -8,7 +8,7 @@ if [[ -n "${UBUNTU_DOTFILES_COMMON_LOADED:-}" ]]; then
 fi
 UBUNTU_DOTFILES_COMMON_LOADED=1
 
-DOTFILES_VERSION="2.0.0"
+DOTFILES_VERSION="2.1.0"
 DOTFILES_NAME="ubuntu-dotfiles"
 DOTFILES_MARKER_BEGIN="# >>> ubuntu-dotfiles >>>"
 DOTFILES_MARKER_END="# <<< ubuntu-dotfiles <<<"

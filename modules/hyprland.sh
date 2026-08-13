@@ -6,7 +6,7 @@ configure_hyprland() {
     return 0
   fi
 
-  log_info "Writing Hyprland config (same palette as Kitty / Starship)"
+  log_info "Writing Hyprland config (same palette as Ptyxis / Starship)"
   mkdir -p "${XDG_CONFIG_HOME}/hypr" "${XDG_CONFIG_HOME}/waybar"
   install_file "${REPO_ROOT}/hyprland/hyprland.conf" "${XDG_CONFIG_HOME}/hypr/hyprland.conf"
   install_file "${REPO_ROOT}/hyprland/waybar/config.jsonc" "${XDG_CONFIG_HOME}/waybar/config.jsonc"

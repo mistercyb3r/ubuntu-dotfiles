@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Terminal stack: Starship, Fastfetch, Kitty, modern CLI tools, zsh plugins.
+# Terminal stack: Starship, Fastfetch, Ptyxis, modern CLI tools, zsh plugins.
 # Decisions are documented in docs/cli-tools.md.
 
 # Always attempted. Missing archive names are skipped by apt_install_missing.
-# Fastfetch is installed separately — it is required, not an optional skip.
+# Fastfetch and Ptyxis are installed separately — they are required, not optional skips.
 # neofetch is never listed here (legacy; not installed).
+# kitty is never listed here (removed; Ptyxis is the default terminal).
 TERMINAL_CORE_PACKAGES=(
-  kitty
   zsh-autosuggestions
   zsh-syntax-highlighting
   zsh-completions
@@ -24,7 +24,7 @@ TERMINAL_OPTIONAL_PACKAGES=(
 )
 
 install_terminal_packages() {
-  log_info "Installing the 2026 terminal stack (Starship, Fastfetch, Kitty, CLI tools)"
+  log_info "Installing the 2026 terminal stack (Starship, Fastfetch, Ptyxis, CLI tools)"
 
   if command_exists starship; then
     log_skip "starship is already installed ($(starship --version 2>/dev/null | head -n1))"
@@ -36,6 +36,7 @@ install_terminal_packages() {
 
   apt_install_missing "${TERMINAL_CORE_PACKAGES[@]}"
   apt_install_missing "${TERMINAL_OPTIONAL_PACKAGES[@]}"
+  install_ptyxis
   install_fastfetch
 
   if command_exists tldr && ! command_exists tealdeer; then
@@ -83,6 +84,34 @@ _install_starship_deb() {
   rm -rf "${tmp}"
   log_success "Installed starship to /usr/local/bin/starship"
   state_set "STARSHIP_METHOD" "github-release"
+}
+
+# Required default terminal. Ubuntu 26.04 ships Ptyxis in the archive.
+# Never falls back to Kitty.
+install_ptyxis() {
+  if command_exists ptyxis || [[ -x /usr/bin/ptyxis ]]; then
+    log_skip "ptyxis is already installed ($(command -v ptyxis || echo /usr/bin/ptyxis))"
+    return 0
+  fi
+
+  log_info "Installing Ptyxis (required default terminal)"
+
+  if apt_package_available ptyxis; then
+    apt_install_missing ptyxis
+  else
+    log_error "ptyxis is not in the enabled apt repositories."
+    log_error "On Ubuntu 26.04: sudo apt-get update && sudo apt-get install -y ptyxis"
+    return 1
+  fi
+
+  if command_exists ptyxis || [[ -x /usr/bin/ptyxis ]]; then
+    log_success "Ptyxis: $(command -v ptyxis || echo /usr/bin/ptyxis)"
+    return 0
+  fi
+
+  log_error "Ptyxis is required and could not be installed."
+  log_error "On Ubuntu 26.04: sudo apt-get install -y ptyxis"
+  return 1
 }
 
 # Required greeting tool. Ubuntu 26.04: universe package. Older releases: GitHub .deb.

@@ -1,22 +1,28 @@
 #!/usr/bin/env bash
-# GNOME extensions policy for this workstation.
+# GNOME 50 extension policy (Ubuntu 26.04, Latitude UHD 620).
 #
-# This project does NOT install GNOME Shell extensions.
-# Ubuntu already ships Dash to Dock (as Ubuntu Dock) and AppIndicator support.
-# Extra extensions are a common source of breakage after GNOME version upgrades.
+# This project does NOT install extensions from extensions.gnome.org.
+# Ubuntu already ships and maintains:
+#   - Ubuntu Dock (dash-to-dock fork) — configured in gnome/settings.sh
+#   - AppIndicator / KStatusNotifierItem
+#   - Desktop Icons NG (left at Ubuntu defaults)
+#
+# Research (2026-08):
+# - Blur my Shell 72 claims GNOME 50 support, but it conflicts with Ubuntu Dock
+#   overview highlighting and costs GPU time on Intel UHD 620. Not installed.
+# - Dash to Dock 105 supports GNOME 50; Ubuntu Dock is the packaged equivalent.
+# - Clipboard Indicator is redundant: GNOME 50 has a built-in clipboard.
+# - Vitals / system-monitor extensions keep sensors polling. Skip for battery.
+# - Extra dock animation companions add Shell hooks we do not need.
+#
+# Extension Manager is installed with the look profile so you can add ONE
+# extension yourself if you accept the upgrade risk.
 
 gnome_document_extensions() {
-  log_info "GNOME extensions: this repo does not enable extra Shell extensions."
-  log_info "Ubuntu Dock and AppIndicator are already part of Ubuntu Desktop."
-  log_info "Extension Manager is installed with the look profile if you want one extra extension."
-  log_info "Prefer one extension at a time. Blur-my-Shell is not installed (breaks on GNOME upgrades)."
+  log_info "GNOME extensions: only Ubuntu-shipped Dock + AppIndicator are used."
+  log_info "Blur my Shell is not installed (UHD 620 + Ubuntu Dock conflict)."
+  log_info "Extension Manager is available if you want one extra extension later."
 }
-
-# Documented optional extensions (NOT installed):
-# - Clipboard Indicator: GNOME 45+ has a built-in clipboard; skip.
-# - Caffeine: use `powerprofilesctl set performance` or GNOME's built-in inhibit instead.
-# - Blur my Shell / dash cosmetics: visual only, skip for stability.
-# - gsconnect: useful if you pair a phone; install yourself if needed.
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   set -euo pipefail

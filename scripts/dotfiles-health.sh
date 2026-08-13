@@ -162,11 +162,27 @@ else
   status warn "Tailscale" "not installed"
 fi
 
-if have kitty; then
-  status ok "Kitty" "$(command -v kitty)"
+if have ptyxis || [[ -x /usr/bin/ptyxis ]]; then
+  status ok "Ptyxis" "$(command -v ptyxis 2>/dev/null || echo /usr/bin/ptyxis)"
 else
-  status fail "Kitty" "not on PATH — Super+T cannot open the workstation terminal"
+  status fail "Ptyxis" "not on PATH — Super+T cannot open the workstation terminal"
 fi
+
+if have kitty; then
+  status warn "Kitty leftover" "$(command -v kitty) is unused. Ptyxis is the default terminal."
+else
+  status ok "Kitty" "not required"
+fi
+
+_ptyxis_palette="${XDG_DATA_HOME:-${HOME}/.local/share}/org.gnome.Ptyxis/palettes/Workstation.palette"
+if [[ -f "${_ptyxis_palette}" ]]; then
+  status ok "Ptyxis palette" "${_ptyxis_palette}"
+elif [[ -f "${ROOT}/terminal/ptyxis/Workstation.palette" ]]; then
+  status warn "Ptyxis palette" "repo copy present; run ./install.sh on Ubuntu to install it"
+else
+  status fail "Ptyxis palette" "Workstation.palette missing"
+fi
+unset _ptyxis_palette
 
 if have tmux; then
   status ok "tmux" "$(tmux -V 2>/dev/null)"
@@ -207,17 +223,127 @@ default_term=""
 if command -v gsettings >/dev/null 2>&1; then
   default_term="$(gsettings get org.gnome.desktop.default-applications.terminal exec 2>/dev/null || true)"
 fi
-if [[ "${default_term}" == *kitty* ]]; then
+if [[ "${default_term}" == *ptyxis* ]]; then
   status ok "Super+T terminal" "${default_term}"
 elif [[ -n "${default_term}" ]]; then
-  status warn "Super+T terminal" "${default_term} (expected kitty)"
+  status warn "Super+T terminal" "${default_term} (expected ptyxis)"
 else
-  status warn "Super+T terminal" "gsettings unavailable here"
+  status warn "Super+T terminal" "gsettings unavailable here (check on Ubuntu)"
+fi
+
+_xterm_alt=""
+if command -v update-alternatives >/dev/null 2>&1; then
+  _xterm_alt="$(update-alternatives --query x-terminal-emulator 2>/dev/null | awk '/^Value:/{print $2}' || true)"
+fi
+if [[ "${_xterm_alt}" == *ptyxis* ]]; then
+  status ok "x-terminal-emulator" "${_xterm_alt}"
+elif [[ -n "${_xterm_alt}" ]]; then
+  status warn "x-terminal-emulator" "${_xterm_alt} (expected /usr/bin/ptyxis)"
+fi
+unset _xterm_alt
+
+_stale_kitty=""
+_stale_kitty="$(grep -RIn --include='*.sh' -E '_terminal_prefer_kitty|kitty\.conf|/usr/bin/kitty' \
+  "${ROOT}/packages" "${ROOT}/modules" "${ROOT}/gnome" "${ROOT}/install.sh" 2>/dev/null || true)"
+if [[ -n "${_stale_kitty}" ]]; then
+  status fail "Stale Kitty" "installer still configures Kitty — pull the latest repo"
+else
+  status ok "Stale Kitty" "no installer/config references"
+fi
+unset _stale_kitty
+
+if command -v gnome-shell >/dev/null 2>&1; then
+  status ok "GNOME" "$(gnome-shell --version 2>/dev/null | tr -d '\n')"
+else
+  status warn "GNOME" "gnome-shell not on PATH (check on Ubuntu desktop)"
+fi
+
+_session="${XDG_SESSION_TYPE:-}"
+if [[ "${_session}" == "wayland" ]]; then
+  status ok "Session" "Wayland"
+elif [[ -n "${_session}" ]]; then
+  status warn "Session" "${_session} (expected wayland on Ubuntu 26.04)"
+else
+  status warn "Session" "XDG_SESSION_TYPE unset (check on Ubuntu)"
+fi
+unset _session
+
+if command -v gsettings >/dev/null 2>&1; then
+  _icon="$(gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null || true)"
+  _mono="$(gsettings get org.gnome.desktop.interface monospace-font-name 2>/dev/null || true)"
+  _accent="$(gsettings get org.gnome.desktop.interface accent-color 2>/dev/null || true)"
+  if [[ "${_icon}" == *Papirus* || "${_icon}" == *Yaru* ]]; then
+    status ok "Icon theme" "${_icon}"
+  elif [[ -n "${_icon}" ]]; then
+    status warn "Icon theme" "${_icon}"
+  fi
+  if [[ "${_mono}" == *JetBrains* ]]; then
+    status ok "Monospace font" "${_mono}"
+  elif [[ -n "${_mono}" ]]; then
+    status warn "Monospace font" "${_mono} (expected JetBrainsMono Nerd Font)"
+  fi
+  if [[ "${_accent}" == *teal* ]]; then
+    status ok "Accent" "${_accent}"
+  elif [[ -n "${_accent}" ]]; then
+    status warn "Accent" "${_accent} (expected teal)"
+  fi
+  unset _icon _mono _accent
+else
+  status warn "Desktop theme" "gsettings unavailable here"
+fi
+
+_gtk4="${XDG_CONFIG_HOME:-${HOME}/.config}/gtk-4.0/gtk.css"
+if [[ -f "${_gtk4}" ]] && grep -q '88C0D0' "${_gtk4}"; then
+  status ok "GTK4 css" "${_gtk4}"
+elif [[ -f "${ROOT}/theme/gtk-4.0.css" ]]; then
+  status warn "GTK4 css" "repo copy present; run ./install.sh on Ubuntu"
+else
+  status fail "GTK4 css" "missing Nordic gtk.css"
+fi
+unset _gtk4
+
+if have yazi; then
+  status ok "Yazi" "$(command -v yazi)"
+else
+  status warn "Yazi" "not on PATH (y alias inactive if unpackaged)"
+fi
+
+_broken=0
+if [[ -d "${HOME}/.local/share/applications" ]]; then
+  while IFS= read -r _desk; do
+    _exec="$(awk -F= '/^Exec=/{print $2; exit}' "${_desk}" 2>/dev/null | awk '{print $1}' || true)"
+    _exec="${_exec//\"/}"
+    if [[ -n "${_exec}" && "${_exec}" != /* && "${_exec}" != env ]]; then
+      if ! command -v "${_exec}" >/dev/null 2>&1; then
+        _broken=$((_broken + 1))
+      fi
+    elif [[ "${_exec}" == /* && ! -x "${_exec}" ]]; then
+      _broken=$((_broken + 1))
+    fi
+  done < <(find "${HOME}/.local/share/applications" -name '*.desktop' -type f 2>/dev/null || true)
+fi
+if [[ "${_broken}" -gt 0 ]]; then
+  status warn "Desktop entries" "${_broken} user .desktop file(s) have a missing Exec"
+else
+  status ok "Desktop entries" "no broken user entries found"
+fi
+unset _broken _desk _exec
+
+if command -v gnome-extensions >/dev/null 2>&1; then
+  _enabled="$(gnome-extensions list --enabled 2>/dev/null || true)"
+  if printf '%s\n' "${_enabled}" | grep -qi 'blur-my-shell'; then
+    status warn "Extensions" "blur-my-shell is enabled (heavy on UHD 620)"
+  else
+    status ok "Extensions" "no blur-my-shell; Ubuntu Dock/AppIndicator are the intended extras"
+  fi
+  unset _enabled
+else
+  status warn "Extensions" "gnome-extensions unavailable here"
 fi
 
 if [[ -f "${ROOT}/scripts/theme-health.sh" ]]; then
   if bash "${ROOT}/scripts/theme-health.sh"; then
-    status ok "Theme" "Kitty / Starship / tmux match theme/palette.env"
+    status ok "Theme" "Ptyxis / Starship / tmux match theme/palette.env"
   else
     status fail "Theme" "palette mismatch — run theme-health"
   fi

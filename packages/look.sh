@@ -3,8 +3,10 @@
 
 LOOK_PACKAGES=(
   papirus-icon-theme
+  papirus-folders
   yaru-theme-gtk
   yaru-theme-icon
+  fonts-inter
   gnome-tweaks
   gnome-shell-extension-manager
   cmatrix
