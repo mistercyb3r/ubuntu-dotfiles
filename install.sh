@@ -228,6 +228,11 @@ ${C_BOLD}Manual steps (not automated on purpose):${C_RESET}
   6. If you were added to the docker group, log out and back in.
      This installer will not reboot the machine.
 
+${C_BOLD}The desktop does not change from git pull alone.${C_RESET}
+  Close every terminal, then log out and back in.
+  If the wallpaper/theme still looks old, run this on the desktop:
+    bash scripts/apply-look.sh
+
 ${C_BOLD}Prove the terminal actually changed:${C_RESET}
   preview-terminal
   dotfiles-health

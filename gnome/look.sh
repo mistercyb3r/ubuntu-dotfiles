@@ -51,12 +51,18 @@ _look_set_ui_font() {
 }
 
 _look_set_wallpaper() {
-  local dest="${XDG_DATA_HOME:-${HOME}/.local/share}/backgrounds/ubuntu-dotfiles-nordic.svg"
-  local src="${REPO_ROOT:-}/theme/wallpapers/nordic-polar.svg"
+  # GNOME wallpaper reliably accepts PNG. SVG often shows as a blank/old background.
+  local dest="${XDG_DATA_HOME:-${HOME}/.local/share}/backgrounds/ubuntu-dotfiles-nordic.png"
+  local root="${REPO_ROOT:-}"
+  if [[ -z "${root}" ]]; then
+    root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+  fi
+  local src="${root}/theme/wallpapers/nordic-polar.png"
   local wp=""
 
-  if [[ -z "${REPO_ROOT:-}" ]]; then
-    src="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/theme/wallpapers/nordic-polar.svg"
+  if [[ ! -f "${src}" ]]; then
+    src="${root}/theme/wallpapers/nordic-polar.svg"
+    dest="${XDG_DATA_HOME:-${HOME}/.local/share}/backgrounds/ubuntu-dotfiles-nordic.svg"
   fi
 
   if [[ -f "${src}" ]]; then
