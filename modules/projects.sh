@@ -9,6 +9,8 @@ PROJECT_DIRS=(
   web
   python
   homelab
+  security
+  games
   experiments
 )
 
@@ -48,6 +50,8 @@ never deletes it.
 | `web/` | Web apps and front-end work |
 | `python/` | Python libraries, CLIs, APIs |
 | `homelab/` | Self-hosted and Linux server projects |
+| `security/` | Labs, notes, allowed-scope security work |
+| `games/` | Game projects and engines |
 | `experiments/` | Throwaway spikes |
 
 Create a new repo with:

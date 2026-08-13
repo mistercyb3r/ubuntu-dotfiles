@@ -80,7 +80,7 @@ _look_set_wallpaper() {
   fi
 }
 
-# Catppuccin Mocha in GNOME Terminal, with light transparency.
+# Same palette as Kitty (theme/palette.md). Fallback if Super+T is not Kitty.
 gnome_apply_terminal_theme() {
   if ! command_exists gsettings; then
     return 0
@@ -98,18 +98,18 @@ gnome_apply_terminal_theme() {
   fi
 
   local schema="org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${id}/"
-  log_info "Theming GNOME Terminal profile ${id} (Catppuccin Mocha, 18% transparency)"
+  log_info "Theming GNOME Terminal profile ${id} (workstation palette, zsh)"
 
   _gset_rel "${schema}" use-theme-colors "false"
-  _gset_rel "${schema}" background-color "'#1e1e2e'"
-  _gset_rel "${schema}" foreground-color "'#cdd6f4'"
+  _gset_rel "${schema}" background-color "'#0b0e14'"
+  _gset_rel "${schema}" foreground-color "'#c0caf5'"
   _gset_rel "${schema}" cursor-colors-set "true"
-  _gset_rel "${schema}" cursor-background-color "'#f5e0dc'"
-  _gset_rel "${schema}" cursor-foreground-color "'#1e1e2e'"
+  _gset_rel "${schema}" cursor-background-color "'#7dcfff'"
+  _gset_rel "${schema}" cursor-foreground-color "'#0b0e14'"
   _gset_rel "${schema}" bold-color-same-as-fg "true"
-  _gset_rel "${schema}" palette "['#45475a', '#f38ba8', '#a6e3a1', '#f9e2af', '#89b4fa', '#f5c2e7', '#94e2d5', '#bac2de', '#585b70', '#f38ba8', '#a6e3a1', '#f9e2af', '#89b4fa', '#f5c2e7', '#94e2d5', '#a6adc8']"
+  _gset_rel "${schema}" palette "['#0b0e14', '#f7768e', '#9ece6a', '#e0af68', '#7aa2f7', '#bb9af7', '#7dcfff', '#c0caf5', '#565f89', '#f7768e', '#9ece6a', '#e0af68', '#7aa2f7', '#bb9af7', '#7dcfff', '#ffffff']"
   _gset_rel "${schema}" use-transparent-background "true"
-  _gset_rel "${schema}" background-transparency-percent "18"
+  _gset_rel "${schema}" background-transparency-percent "8"
   _gset_rel "${schema}" use-system-font "false"
   if fc-list 2>/dev/null | grep -qi 'JetBrainsMono Nerd Font'; then
     _gset_rel "${schema}" font "'JetBrainsMono Nerd Font 12'"
@@ -121,7 +121,6 @@ gnome_apply_terminal_theme() {
   _gset_rel "${schema}" default-size-columns "120"
   _gset_rel "${schema}" default-size-rows "32"
   _gset_rel "${schema}" scrollback-unlimited "true"
-  # Force zsh so neofetch / Oh My Zsh run even if the login shell is still bash.
   _gset_rel "${schema}" use-custom-command "true"
   _gset_rel "${schema}" custom-command "'zsh'"
 }

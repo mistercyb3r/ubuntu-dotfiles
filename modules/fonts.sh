@@ -11,11 +11,14 @@ configure_fonts() {
   fi
 
   if command_exists gsettings && { [[ -n "${DISPLAY:-}" ]] || [[ -n "${WAYLAND_DISPLAY:-}" ]]; }; then
-    _gset_if_exists org.gnome.desktop.interface monospace-font-name "JetBrains Mono 12"
+    if command_exists fc-list && fc-list | grep -qi 'JetBrainsMono Nerd Font'; then
+      _gset_if_exists org.gnome.desktop.interface monospace-font-name "JetBrainsMono Nerd Font 12"
+    else
+      _gset_if_exists org.gnome.desktop.interface monospace-font-name "JetBrains Mono 12"
+    fi
   fi
 
-  log_info "Default monospace font: JetBrains Mono (Fira Code is also installed when available)."
-  log_info "Set it in GNOME Terminal: Preferences → Profile → Text → Custom font."
+  log_info "Monospace font: JetBrainsMono Nerd Font when installed, else JetBrains Mono."
   state_append_list "MODULES" "fonts"
 }
 

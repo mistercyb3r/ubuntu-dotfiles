@@ -22,7 +22,9 @@ ubuntu-dotfiles/
 ├── modules/                Apply configuration (shell, git, ssh, gnome, …)
 ├── shell/                  Zsh files sourced from ~/.zshrc
 ├── git/                    Shared gitconfig (no identity)
-├── terminal/               Starship, tmux, fastfetch, neofetch
+├── terminal/               Starship, tmux, Fastfetch, Kitty, Yazi, fzf
+├── theme/                  Shared colour palette
+├── hyprland/               Optional session (./install.sh --hyprland)
 ├── gnome/                  gsettings, look theme, extension policy
 ├── ssh/                    Example client config (placeholders)
 ├── scripts/                User-facing commands linked into ~/.local/bin

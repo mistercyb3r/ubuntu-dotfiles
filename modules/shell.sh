@@ -19,10 +19,6 @@ configure_shell() {
 # Managed by ubuntu-dotfiles. Safe to remove this block; your other zsh settings stay.
 export UBUNTU_DOTFILES_ROOT="${REPO_ROOT}"
 export PATH="\${HOME}/.local/bin:\${PATH}"
-# Greeting first — a later plugin error must not hide neofetch.
-if [ -f "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh" ]; then
-  . "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh"
-fi
 if [ -f "\${UBUNTU_DOTFILES_ROOT}/shell/zshrc" ]; then
   . "\${UBUNTU_DOTFILES_ROOT}/shell/zshrc"
 fi
@@ -33,18 +29,33 @@ EOF
   # Bash terminals (Ubuntu default until zsh is the login shell) still get the greeting.
   local bash_block
   bash_block="$(cat <<EOF
-# Managed by ubuntu-dotfiles.
+# Managed by ubuntu-dotfiles. Bash fallback until the login shell is zsh.
 export UBUNTU_DOTFILES_ROOT="${REPO_ROOT}"
 export PATH="\${HOME}/.local/bin:\${PATH}"
+export STARSHIP_CONFIG="\${XDG_CONFIG_HOME:-\${HOME}/.config}/starship.toml"
 if [ -n "\${PS1:-}" ] && [ -f "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh" ]; then
   . "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh"
+fi
+if [ -n "\${PS1:-}" ] && [ -f "\${UBUNTU_DOTFILES_ROOT}/terminal/fzf.env" ]; then
+  . "\${UBUNTU_DOTFILES_ROOT}/terminal/fzf.env"
+fi
+if [ -n "\${PS1:-}" ] && [ -f "\${UBUNTU_DOTFILES_ROOT}/shell/aliases.sh" ]; then
+  . "\${UBUNTU_DOTFILES_ROOT}/shell/aliases.sh"
 fi
 if [ -n "\${PS1:-}" ] && command -v starship >/dev/null 2>&1; then
   eval "\$(starship init bash)"
 fi
+if [ -n "\${PS1:-}" ] && command -v zoxide >/dev/null 2>&1; then
+  eval "\$(zoxide init bash)"
+fi
 EOF
 )"
   upsert_marked_block "${HOME}/.bashrc" "${bash_block}"
+
+  if [[ -f "${HOME}/.zshrc" ]] && grep -q 'oh-my-zsh.sh' "${HOME}/.zshrc"; then
+    log_warn "~/.zshrc still sources Oh My Zsh. Starship runs after it, but startup is slower."
+    log_warn "You can comment out the 'source \$ZSH/oh-my-zsh.sh' line; this installer will not delete it."
+  fi
 
   _maybe_change_shell_to_zsh
   state_append_list "MODULES" "shell"

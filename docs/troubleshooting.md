@@ -22,28 +22,28 @@ or:
 bash gnome/settings.sh
 ```
 
-## Neofetch / terminal effects do not appear
+## Fastfetch / two-line prompt do not appear
 
-The Ubuntu default terminal often still starts **bash**, so the zsh theme never loads.
+The Ubuntu default terminal often still starts **bash**, so the zsh config never loads.
 
 ```bash
 cd ~/ubuntu-dotfiles
 git pull
 ./install.sh
 chsh -s "$(command -v zsh)"
+dotfiles-health
+preview-terminal
 ```
 
-Then close every terminal and open a **new** one. Check:
+Then close every terminal and open a **new** one (Super+T → Kitty). Check:
 
 ```bash
 echo "$SHELL $0"
-command -v neofetch
-command -v starship
-ls ~/.oh-my-zsh/oh-my-zsh.sh
-neofetch
+command -v zsh starship fastfetch kitty
+fc-list | grep -i 'JetBrainsMono Nerd'
 ```
 
-`echo $0` should say `zsh` or `-zsh`. If it says `bash`, the terminal is not using zsh yet — log out of GNOME once, or open Kitty with Super+T.
+`echo $0` should say `zsh` or `-zsh`. If it says `bash`, log out of GNOME once.
 
 ## Starship not found after install
 

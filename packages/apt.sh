@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Core apt packages for a developer laptop.
 # Prefer Ubuntu archive packages. Skip names that are not in this release.
+# neofetch is never installed. Fastfetch is the greeting (packages/terminal.sh).
 
 # Packages that should exist on Ubuntu 22.04 and 24.04 LTS.
 APT_CORE_PACKAGES=(
@@ -54,7 +55,6 @@ APT_CORE_OPTIONAL=(
   wl-clipboard
   plocate
   fonts-firacode
-  neofetch
 )
 
 install_apt_packages() {

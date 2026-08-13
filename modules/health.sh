@@ -33,6 +33,22 @@ run_health_checks() {
     log_warn "starship is not on PATH"
   fi
 
+  if command_exists fastfetch; then
+    log_success "fastfetch: $(command -v fastfetch)"
+  else
+    log_error "fastfetch is not on PATH (greeting will be empty)"
+    failed=1
+  fi
+  if command_exists neofetch; then
+    log_warn "neofetch is installed but unused. Fastfetch is the greeting. Optional: sudo apt-get remove -y neofetch"
+  fi
+
+  if command_exists kitty; then
+    log_success "kitty: $(command -v kitty)"
+  else
+    log_warn "kitty is not on PATH"
+  fi
+
   if [[ -f "${HOME}/.zshrc" ]] && grep -q 'ubuntu-dotfiles' "${HOME}/.zshrc"; then
     log_success "zshrc contains the ubuntu-dotfiles block"
   else
@@ -84,8 +100,9 @@ _health_shell_startup() {
   zsh -lic 'exit' >/dev/null 2>&1 || true
   end="$(date +%s%N)"
   ms=$(( (end - start) / 1000000 ))
-  log_info "Interactive zsh startup ≈ ${ms} ms (target: under 400 ms on this hardware)"
+  log_info "Interactive zsh startup ≈ ${ms} ms (target: under 100 ms idle, under 400 ms on this laptop)"
   if [[ "${ms}" -gt 800 ]]; then
     log_warn "Shell startup is slower than expected. nvm is lazy-loaded; check extra ~/.zshrc content."
   fi
+  log_info "After login, run: preview-terminal   and   dotfiles-health"
 }

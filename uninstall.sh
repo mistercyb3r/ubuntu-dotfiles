@@ -65,7 +65,7 @@ remove_marked_block "${HOME}/.zshrc"
 remove_marked_block "${HOME}/.bashrc"
 
 if [[ -f "${HOME}/.tmux.conf" ]]; then
-  if grep -q 'Prefix remains C-b' "${HOME}/.tmux.conf" 2>/dev/null; then
+  if grep -qE 'Prefix (remains|stays) C-b' "${HOME}/.tmux.conf" 2>/dev/null; then
     backup_file "${HOME}/.tmux.conf"
     if ! is_dry_run; then
       rm -f "${HOME}/.tmux.conf"
@@ -110,7 +110,7 @@ if command_exists git; then
 fi
 
 # Remove wrappers we linked into ~/.local/bin
-for name in system-info system-update cleanup-system new-project server check-secrets setup-git-identity bat fd; do
+for name in system-info system-update cleanup-system new-project server check-secrets setup-git-identity preview-terminal dotfiles-health bat fd; do
   dest="${XDG_BIN_HOME}/${name}"
   if [[ -L "${dest}" ]]; then
     target="$(readlink -f "${dest}" 2>/dev/null || true)"

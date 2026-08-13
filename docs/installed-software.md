@@ -64,13 +64,14 @@ If `docker` is already on `PATH`, it is **not** replaced.
 | `fonts-firacode` | Optional ligature font, if packaged |
 | `gnome-tweaks` | Full profile only; settings UI. No extension dump |
 | `papirus-icon-theme` | Dark icon set for the look profile |
-| `kitty` | GPU terminal with transparency and cursor trail |
-| Oh My Zsh | Official git clone; plugins only (prompt stays Starship) |
-| `zsh-autosuggestions` | Ghost-text suggestions |
-| `zsh-syntax-highlighting` | Live red/green command colouring |
+| `kitty` | GPU terminal; Super+T default |
+| `zsh-autosuggestions` | Grey ghost-text; right-arrow accepts |
+| `zsh-syntax-highlighting` | Green valid / red invalid commands |
 | `zoxide` | Fast directory jumper (`z`) |
-| `neofetch` | Classic greeting fallback |
-| `fastfetch` | Current greeting (replaces neofetch when packaged) |
+| `fastfetch` | Supported system-info greeting. Ubuntu 26.04 universe package, else official GitHub .deb |
+| `git-delta` | Readable git diffs when packaged |
+| `yazi` | Terminal file manager (`y`) when packaged |
+| `duf` / `yq` / `tealdeer` | Disks, YAML, short man pages — skipped if missing |
 | `cmatrix` | Optional rain effect (`matrix`) |
 | JetBrainsMono Nerd Font | Official nerd-fonts release; icons in prompt and `eza` |
 | `gnome-shell-extension-manager` | UI to add one extension yourself; none are enabled by us |
@@ -88,7 +89,8 @@ If `docker` is already on `PATH`, it is **not** replaced.
 
 | Thing | Reason |
 |-------|--------|
-| Oh My Zsh | Slow, large, unnecessary with Starship |
+| Oh My Zsh | Not sourced. Starship is the only prompt. |
+| neofetch | Legacy. Never installed. Fastfetch is the only greeting. |
 | TLP | Conflicts with `power-profiles-daemon` |
 | `preload` | Extra daemon, mixed benefit |
 | NVIDIA drivers | This machine is Intel iGPU |

@@ -1,0 +1,18 @@
+[manager]
+cwd = { fg = "#7dcfff", bold = true }
+
+[status]
+separator_open = ""
+separator_close = ""
+mode_normal = { fg = "#0b0e14", bg = "#7dcfff", bold = true }
+mode_select = { fg = "#0b0e14", bg = "#bb9af7", bold = true }
+
+[filetype]
+rules = [
+  { mime = "image/*", fg = "#bb9af7" },
+  { mime = "video/*", fg = "#7aa2f7" },
+  { mime = "audio/*", fg = "#9ece6a" },
+  { mime = "application/x-bittorrent", fg = "#e0af68" },
+  { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#ff9e64" },
+  { mime = "application/{pdf,doc,rtf}", fg = "#7dcfff" },
+]

@@ -1,0 +1,22 @@
+* {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 12px;
+  color: #c0caf5;
+}
+
+window#waybar {
+  background: #0b0e14;
+  border-bottom: 1px solid #161821;
+}
+
+#workspaces button.active {
+  color: #0b0e14;
+  background: #7dcfff;
+}
+
+#clock, #cpu, #memory, #battery, #network {
+  padding: 0 8px;
+}
+
+#battery.warning { color: #e0af68; }
+#battery.critical { color: #f7768e; }

@@ -33,7 +33,8 @@ Priorities: stability, responsiveness, battery life, developer productivity. No 
 
 | Version | Status |
 |---------|--------|
-| Ubuntu 24.04 LTS | Primary target |
+| Ubuntu 26.04 LTS | Primary target (Latitude 5400) |
+| Ubuntu 24.04 LTS | Supported |
 | Ubuntu 22.04 LTS | Supported |
 | Other Ubuntu (24.10+) | Warns, continues if you confirm |
 | Debian | Warns, continues if you confirm |
@@ -44,9 +45,9 @@ Priorities: stability, responsiveness, battery life, developer productivity. No 
 
 Core tools from Ubuntu repositories where possible:
 
-Zsh, Starship, git, GitHub CLI (`gh`), OpenSSH **client**, build-essential, fzf, ripgrep, fd, bat, eza (if the archive has it), jq, tree, btop, htop, tmux, curl, wget, unzip, Python 3, pipx, uv, nvm + Node.js LTS, JetBrains Mono.
+Zsh, Starship, Fastfetch, Kitty, JetBrainsMono Nerd Font, git, GitHub CLI (`gh`), OpenSSH **client**, build-essential, fzf, ripgrep, fd, bat, eza, zoxide, jq, tree, btop, htop, tmux, curl, wget, unzip, Python 3, pipx, uv, nvm + Node.js LTS.
 
-Optional (full profile): Docker Engine, Tailscale package, and the current popular look (Kitty, Catppuccin, Nerd Font, fastfetch, zsh effects).
+Optional (full profile): Docker Engine, Tailscale package, GNOME look. Optional flags: `--pentest`, `--hyprland`.
 
 See [docs/installed-software.md](docs/installed-software.md) for why each tool exists.
 
@@ -54,15 +55,29 @@ See [docs/installed-software.md](docs/installed-software.md) for why each tool e
 
 | Area | Behaviour |
 |------|-----------|
-| Shell | Zsh + Starship; marked block in `~/.zshrc` (existing content kept) |
+| Shell | Zsh + **Starship only** (no Oh My Zsh theme); marked block in `~/.zshrc` |
 | Git | Shared defaults via `include.path`; **no** name/email in the repo |
-| Terminal | Kitty (Catppuccin, cursor trail), Starship, tmux |
+| Terminal | Kitty + Fastfetch + two-line Starship. [docs/terminal.md](docs/terminal.md) |
 | SSH | Client defaults + example host file; **no** `sshd` |
-| GNOME | Dark purple Yaru, Papirus icons, centred **bottom dock** that hides in fullscreen |
-| Look | Nerd Font, fastfetch, ghost-text, syntax colours, `matrix` / `pipes`. [docs/look.md](docs/look.md) |
-| Projects | `~/Projects/{personal,ai,web,python,homelab,experiments}` |
+| GNOME | Dark Yaru, Papirus, centred **bottom dock** that hides in fullscreen |
+| Look | One palette across Kitty, Starship, Fastfetch, tmux, fzf, Yazi. [docs/look.md](docs/look.md) |
+| Projects | `~/Projects/{personal,ai,web,python,homelab,security,games,experiments}` |
 | Performance | zram, SSD TRIM, `power-profiles-daemon` balanced |
 | Backups | Timestamped copies under `~/.local/share/ubuntu-dotfiles/backups/` |
+
+## What the terminal should look like
+
+```text
+user@latitude
+os        Ubuntu 24.04
+host      Latitude 5400
+...
+
+╭─ ~/Projects/ai/BotForge · main !
+╰─❯
+```
+
+Prove it on the laptop: `preview-terminal` and `dotfiles-health`. Details: [docs/terminal.md](docs/terminal.md).
 
 ## How to install
 
@@ -93,7 +108,9 @@ Useful options:
 --no-docker     skip Docker
 --no-node       skip nvm / Node.js
 --no-python     skip pipx / uv (apt python3 is still installed)
---no-look       skip themed desktop, terminal colours, and neofetch
+--no-look       skip GNOME wallpaper / Papirus (terminal stack still installs)
+--pentest       optional lab tools (nmap, wireshark, ...)
+--hyprland      optional Hyprland session (GNOME stays default)
 --dry-run       print actions only
 --yes           assume yes for prompts (still will not log into Tailscale)
 ```
@@ -187,9 +204,11 @@ Then put the MagicDNS name or Tailscale IP in `~/.ssh/config.d/10-homeserver.con
 | `server list` / `server ssh homeserver` | SSH to configured hosts |
 | `check-secrets` | crude pre-commit secret scan |
 | `setup-git-identity` | set `user.name` / `user.email` |
-| `fetch` | fastfetch / neofetch greeting |
-| `matrix` | cmatrix rain (`q` to quit) |
-| `pipes` | colourful pipes (`Ctrl-C` to quit) |
+| `preview-terminal` | show the intended Fastfetch + prompt look |
+| `dotfiles-health` | green / yellow / red proof the stack is loaded |
+| `fetch` | Fastfetch greeting |
+| `ssh-home` | SSH to Host `homeserver` from your config |
+| `tm` / `ta` | tmux (not auto-started) |
 | `z <dir>` | jump to a frequent directory (zoxide) |
 
 Python: [docs/python.md](docs/python.md). Node: [docs/nodejs.md](docs/nodejs.md). Docker: [docs/docker.md](docs/docker.md).
@@ -212,9 +231,11 @@ See [docs/troubleshooting.md](docs/troubleshooting.md).
 Quick checks:
 
 ```bash
+dotfiles-health
+preview-terminal
+zsh-bench
 system-info
 ./install.sh --dry-run
-zsh-startup
 ```
 
 ## Security considerations

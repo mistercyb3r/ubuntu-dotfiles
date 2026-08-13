@@ -20,7 +20,9 @@ Options:
   --no-docker     Skip Docker
   --no-node       Skip nvm / Node.js
   --no-python     Skip pipx / uv (Python 3 from apt is still installed)
-  --no-look       Skip the themed desktop/terminal look (neofetch, colours)
+  --no-look       Skip GNOME theme / wallpaper / Papirus (terminal stack still installs)
+  --pentest       Install optional lab / pentest tools (nmap, wireshark, ...)
+  --hyprland      Install an optional Hyprland session (GNOME stays default)
   --dry-run       Print actions without changing the system
   --yes, -y       Assume "yes" for confirmation prompts
   --help, -h      Show this help
@@ -40,6 +42,8 @@ SKIP_DOCKER=0
 SKIP_NODE=0
 SKIP_PYTHON=0
 SKIP_LOOK=0
+ENABLE_PENTEST=0
+ENABLE_HYPRLAND=0
 INSTALL_PROFILE="full"
 
 while [[ $# -gt 0 ]]; do
@@ -58,6 +62,8 @@ while [[ $# -gt 0 ]]; do
     --no-node) SKIP_NODE=1; shift ;;
     --no-python) SKIP_PYTHON=1; shift ;;
     --no-look) SKIP_LOOK=1; shift ;;
+    --pentest) ENABLE_PENTEST=1; shift ;;
+    --hyprland) ENABLE_HYPRLAND=1; shift ;;
     --dry-run) DRY_RUN=1; shift ;;
     --yes|-y) ASSUME_YES=1; shift ;;
     --help|-h) usage; exit 0 ;;
@@ -70,6 +76,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 export DRY_RUN ASSUME_YES INSTALL_PROFILE SKIP_GNOME SKIP_DOCKER SKIP_NODE SKIP_PYTHON SKIP_LOOK
+export ENABLE_PENTEST ENABLE_HYPRLAND
 
 print_banner() {
   printf '%s\n' "${C_BOLD}${C_CYAN}"
@@ -94,6 +101,8 @@ source_modules() {
     "${REPO_ROOT}/packages/development.sh" \
     "${REPO_ROOT}/packages/optional.sh" \
     "${REPO_ROOT}/packages/look.sh" \
+    "${REPO_ROOT}/packages/pentest.sh" \
+    "${REPO_ROOT}/packages/hyprland.sh" \
     "${REPO_ROOT}/modules/shell.sh" \
     "${REPO_ROOT}/modules/git.sh" \
     "${REPO_ROOT}/modules/terminal.sh" \
@@ -103,6 +112,7 @@ source_modules() {
     "${REPO_ROOT}/modules/look.sh" \
     "${REPO_ROOT}/modules/performance.sh" \
     "${REPO_ROOT}/modules/projects.sh" \
+    "${REPO_ROOT}/modules/hyprland.sh" \
     "${REPO_ROOT}/modules/health.sh"
   do
     # shellcheck disable=SC1090
@@ -158,6 +168,9 @@ main() {
   configure_fonts
   install_look_packages
   configure_look
+  install_pentest_packages
+  install_hyprland_packages
+  configure_hyprland
 
   log_step 7 "${INSTALL_TOTAL_STEPS}" "Configuring development tools"
   install_development_packages
@@ -191,15 +204,22 @@ ${C_BOLD}Manual steps (not automated on purpose):${C_RESET}
   6. If you were added to the docker group, log out and back in.
      This installer will not reboot the machine.
 
+${C_BOLD}Prove the terminal actually changed:${C_RESET}
+  preview-terminal
+  dotfiles-health
+  zsh-bench
+
 ${C_BOLD}Useful commands:${C_RESET}
   system-info          hardware and toolchain snapshot
   system-update        apt / snap / pipx updates
   new-project python x create a project under ~/Projects
   server list          SSH hosts from your config
+  ssh-home             SSH Host homeserver (from your config)
   check-secrets        scan a directory before committing
-  fetch / matrix       greeting / cmatrix effect
+  fetch                Fastfetch greeting
+  tm / ta <session>    tmux (does not auto-start)
 
-Documentation: ${REPO_ROOT}/README.md
+Documentation: ${REPO_ROOT}/docs/terminal.md
 EOF
 }
 

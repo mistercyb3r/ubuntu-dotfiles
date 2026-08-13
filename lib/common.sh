@@ -8,7 +8,7 @@ if [[ -n "${UBUNTU_DOTFILES_COMMON_LOADED:-}" ]]; then
 fi
 UBUNTU_DOTFILES_COMMON_LOADED=1
 
-DOTFILES_VERSION="1.0.0"
+DOTFILES_VERSION="2.0.0"
 DOTFILES_NAME="ubuntu-dotfiles"
 DOTFILES_MARKER_BEGIN="# >>> ubuntu-dotfiles >>>"
 DOTFILES_MARKER_END="# <<< ubuntu-dotfiles <<<"
@@ -167,6 +167,30 @@ package_installed() {
 
 apt_package_available() {
   apt-cache show "$1" >/dev/null 2>&1
+}
+
+# Fastfetch on Ubuntu 26.04 lives in universe. Fresh installs usually have it;
+# enable the component if apt cannot see the package yet.
+ensure_ubuntu_universe() {
+  if ! command_exists apt-cache; then
+    return 0
+  fi
+  if [[ -f /etc/os-release ]]; then
+    # shellcheck disable=SC1091
+    . /etc/os-release
+    if [[ "${ID:-}" != "ubuntu" ]]; then
+      return 0
+    fi
+  fi
+  if is_dry_run; then
+    log_dry "ensure Ubuntu universe component is enabled"
+    return 0
+  fi
+  if command_exists add-apt-repository; then
+    sudo_run add-apt-repository -y universe >/dev/null 2>&1 || true
+  fi
+  APT_UPDATED=0
+  apt_update_once
 }
 
 user_in_group() {

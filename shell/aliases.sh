@@ -35,7 +35,9 @@ elif command -v fdfind >/dev/null 2>&1; then
   alias fd='fdfind'
 fi
 
-alias rg='rg --hidden --glob "!.git"'
+if command -v rg >/dev/null 2>&1; then
+  alias rg='rg --hidden --glob "!.git"'
+fi
 
 # Git (short, non-destructive)
 alias gs='git status -sb'
@@ -58,13 +60,25 @@ if command -v docker >/dev/null 2>&1; then
   alias dcu='docker compose up'
   alias dcd='docker compose down'
   alias dcl='docker compose logs -f'
+  alias docker-status='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
 fi
 
-# System
+# tmux — never auto-start. Attach or create a named session.
+if command -v tmux >/dev/null 2>&1; then
+  alias tm='tmux new -A -s main'
+  alias ta='tmux attach -t'
+  alias tls='tmux ls'
+fi
+
+# System / homelab (no private IPs)
 alias update='system-update'
 alias sysinfo='system-info'
 alias ports='ss -tulpn'
 alias myip='hostname -I'
+
+if command -v tailscale >/dev/null 2>&1; then
+  alias tailscale-status='tailscale status'
+fi
 
 # Path helpers
 alias path='printf "%s\n" "${PATH}" | tr ":" "\n"'
@@ -72,8 +86,6 @@ alias path='printf "%s\n" "${PATH}" | tr ":" "\n"'
 # Look
 if command -v fastfetch >/dev/null 2>&1; then
   alias fetch='fastfetch'
-elif command -v neofetch >/dev/null 2>&1; then
-  alias fetch='neofetch'
 fi
 if command -v cmatrix >/dev/null 2>&1; then
   alias matrix='cmatrix -u 8'

@@ -35,6 +35,16 @@ configure_git() {
   git config --global rerere.enabled true
   git config --global help.autocorrect 20
 
+  if command_exists delta; then
+    git config --global core.pager delta
+    git config --global interactive.diffFilter "delta --color-only"
+    git config --global delta.navigate true
+    git config --global delta.dark true
+    git config --global delta.line-numbers true
+    git config --global delta.syntax-theme "TwoDark"
+    log_success "Git pager set to delta"
+  fi
+
   if command_exists nvim; then
     git config --global core.editor nvim
   elif command_exists vim; then

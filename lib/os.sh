@@ -51,7 +51,7 @@ os_assert_compatible() {
   fi
 
   if ! os_is_debian_like; then
-    die "Unsupported OS (${OS_PRETTY}). This installer supports Ubuntu 22.04/24.04 LTS (Debian-based)."
+    die "Unsupported OS (${OS_PRETTY}). This installer supports Ubuntu 22.04/24.04/26.04 LTS (Debian-based)."
   fi
 
   if ! os_is_ubuntu; then
@@ -60,7 +60,7 @@ os_assert_compatible() {
       die "Aborted."
     fi
   elif ! os_is_supported_ubuntu; then
-    log_warn "Ubuntu ${OS_VERSION_ID} is not in the tested set (22.04 and 24.04 LTS)."
+    log_warn "Ubuntu ${OS_VERSION_ID} is not in the tested set (22.04, 24.04, 26.04 LTS)."
     if [[ "${ASSUME_YES}" != "1" ]] && ! confirm "Continue on Ubuntu ${OS_VERSION_ID}?"; then
       die "Aborted."
     fi

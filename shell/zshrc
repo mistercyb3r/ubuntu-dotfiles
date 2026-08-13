@@ -1,5 +1,5 @@
-# Themed developer shell: Oh My Zsh plugins + Starship + neofetch.
-# Sourced from ~/.zshrc via a marked block.
+# Modular interactive zsh. Starship is the only prompt. No Oh My Zsh theme.
+# Sourced from ~/.zshrc via a marked block. Keep this file small.
 
 if [[ -n "${UBUNTU_DOTFILES_ZSHRC_LOADED:-}" ]]; then
   return 0
@@ -16,72 +16,40 @@ export EDITOR="${EDITOR:-nano}"
 export VISUAL="${VISUAL:-${EDITOR}}"
 export PAGER="${PAGER:-less}"
 export LESS="-R"
+export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-${HOME}/.config}/starship.toml"
+if [[ ! -f "${STARSHIP_CONFIG}" ]]; then
+  export STARSHIP_CONFIG="${UBUNTU_DOTFILES_ROOT}/terminal/starship.toml"
+fi
 
-# Greeting first so a later plugin error cannot hide it.
+# Greeting once, before plugins (a plugin error must not hide Fastfetch).
 if [[ -f "${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh" ]]; then
   # shellcheck disable=SC1091
   . "${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh"
 fi
 
-# ---------------------------------------------------------------------------
-# Oh My Zsh plugins. Prompt stays Starship.
-# ---------------------------------------------------------------------------
-export ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
-export STARSHIP_CONFIG="${UBUNTU_DOTFILES_ROOT}/terminal/starship.toml"
-if command -v starship >/dev/null 2>&1; then
-  ZSH_THEME=""
-else
-  # Classic Oh My Zsh prompt (shows folder + git) if Starship is missing.
-  ZSH_THEME="robbyrussell"
-fi
-DISABLE_AUTO_UPDATE="true"
-DISABLE_UPDATE_PROMPT="true"
-DISABLE_MAGIC_FUNCTIONS="true"
-COMPLETION_WAITING_DOTS="true"
-HIST_STAMPS="yyyy-mm-dd"
-
-plugins=(git fzf colored-man-pages command-not-found)
-[[ -d "${ZSH}/custom/plugins/zsh-autosuggestions" ]] && plugins+=(zsh-autosuggestions)
-[[ -d "${ZSH}/custom/plugins/zsh-syntax-highlighting" ]] && plugins+=(zsh-syntax-highlighting)
-
-if [[ -s "${ZSH}/oh-my-zsh.sh" ]]; then
-  source "${ZSH}/oh-my-zsh.sh" || true
-else
-  HISTFILE="${HOME}/.zsh_history"
-  HISTSIZE=50000
-  SAVEHIST=50000
-  setopt HIST_IGNORE_DUPS HIST_IGNORE_SPACE SHARE_HISTORY INTERACTIVE_COMMENTS AUTO_CD 2>/dev/null || true
-  autoload -Uz compinit 2>/dev/null && compinit -d "${HOME}/.cache/zsh/zcompdump"
+if [[ -f "${UBUNTU_DOTFILES_ROOT}/terminal/fzf.env" ]]; then
+  # shellcheck disable=SC1091
+  . "${UBUNTU_DOTFILES_ROOT}/terminal/fzf.env"
 fi
 
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6c7086'
-
-if [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
-  source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
-if [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
-  source /usr/share/doc/fzf/examples/key-bindings.zsh
+if [[ -f "${UBUNTU_DOTFILES_ROOT}/shell/plugins.zsh" ]]; then
+  # shellcheck disable=SC1091
+  . "${UBUNTU_DOTFILES_ROOT}/shell/plugins.zsh"
 fi
 
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
+
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
-fi
-
-# Highlighting last
-if [[ -f "${ZSH}/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
-  source "${ZSH}/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-elif [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 [[ -f "${UBUNTU_DOTFILES_ROOT}/shell/aliases.sh" ]] && source "${UBUNTU_DOTFILES_ROOT}/shell/aliases.sh"
 [[ -f "${UBUNTU_DOTFILES_ROOT}/shell/functions.sh" ]] && source "${UBUNTU_DOTFILES_ROOT}/shell/functions.sh"
 [[ -f "${HOME}/.zshrc.local" ]] && source "${HOME}/.zshrc.local"
 
+# nvm is lazy: first node/npm/nvm call loads it. Keeps startup under 100ms when possible.
 export NVM_DIR="${NVM_DIR:-${HOME}/.nvm}"
 _ubuntu_dotfiles_nvm_lazy() {
   unset -f nvm node npm npx corepack 2>/dev/null

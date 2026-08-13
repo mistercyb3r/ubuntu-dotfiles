@@ -86,10 +86,44 @@ loadnvm() {
 
 # Measure shell startup (for sanity checks after editing zshrc).
 zsh-startup() {
+  zsh-bench
+}
+
+# Five timed interactive starts. Target: under 100ms when the machine is idle.
+zsh-bench() {
   local i
-  for i in 1 2 3; do
+  printf 'Interactive zsh startup (5 runs). Target <100ms if idle.\n'
+  for i in 1 2 3 4 5; do
+    TIMEFMT='  run '"${i}"': %E real'
     time zsh -lic 'exit'
   done
+}
+
+# Yazi: open and cd into the last directory on quit.
+y() {
+  if ! command -v yazi >/dev/null 2>&1; then
+    printf 'yazi is not installed. Re-run ./install.sh on Ubuntu.\n' >&2
+    return 1
+  fi
+  local tmp cwd
+  tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+  yazi "$@" --cwd-file="${tmp}"
+  if cwd="$(cat -- "${tmp}")" && [[ -n "${cwd}" && "${cwd}" != "${PWD}" ]]; then
+    cd -- "${cwd}" || return
+  fi
+  rm -f -- "${tmp}"
+}
+
+# SSH to the home server. Host comes from ~/.ssh/config (never a hardcoded IP).
+# Copy ~/.ssh/config.d/homelab.conf.example and set Host homeserver.
+ssh-home() {
+  local host="${HOME_SSH_HOST:-homeserver}"
+  if [[ ! -f "${HOME}/.ssh/config" ]] && [[ ! -d "${HOME}/.ssh/config.d" ]]; then
+    printf 'No SSH config yet. Copy ~/.ssh/config.d/homelab.conf.example\n' >&2
+    printf 'to a real *.conf and set Host %s. See docs/tailscale.md\n' "${host}" >&2
+    return 1
+  fi
+  ssh "${host}"
 }
 
 # Short colourful pipes animation (popular rice toy). q / Ctrl-C to stop.

@@ -106,7 +106,7 @@ gnome_apply_dock() {
 }
 
 _gnome_keyboard_shortcuts() {
-  # Super+T → GNOME Terminal (Ctrl+Alt+T remains the Ubuntu default too)
+  # Super+T → default terminal (installer sets that to Kitty)
   _gset org.gnome.settings-daemon.plugins.media-keys terminal "['<Super>t']"
 
   # Super+E → Files (usually already bound; set explicitly)
