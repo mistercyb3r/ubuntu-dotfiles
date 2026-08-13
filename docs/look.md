@@ -18,7 +18,7 @@ Skip it: `./install.sh --no-look`
 | **JetBrainsMono Nerd Font** | Icons in the prompt and `eza` |
 | **Catppuccin Mocha** | The palette almost every rice uses |
 | **Oh My Zsh** | Plugin framework (git, fzf, ghost text, syntax colours) |
-| **Starship** | Prompt (faster than an OMZ theme) |
+| **Starship** | Two-line prompt: `in ~/folder on main` then `❯` |
 | **neofetch** | Full system card when a terminal opens |
 | **eza --icons** | Fancy `ls` |
 | **zoxide** | `z project` jumps to frequent dirs |

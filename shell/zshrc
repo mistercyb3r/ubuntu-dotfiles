@@ -27,7 +27,13 @@ fi
 # Oh My Zsh plugins. Prompt stays Starship.
 # ---------------------------------------------------------------------------
 export ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
-ZSH_THEME=""
+export STARSHIP_CONFIG="${UBUNTU_DOTFILES_ROOT}/terminal/starship.toml"
+if command -v starship >/dev/null 2>&1; then
+  ZSH_THEME=""
+else
+  # Classic Oh My Zsh prompt (shows folder + git) if Starship is missing.
+  ZSH_THEME="robbyrussell"
+fi
 DISABLE_AUTO_UPDATE="true"
 DISABLE_UPDATE_PROMPT="true"
 DISABLE_MAGIC_FUNCTIONS="true"

@@ -1,83 +1,82 @@
-# Catppuccin Mocha + Nerd Font / Powerline symbols.
-# Pair with JetBrainsMono Nerd Font in Kitty.
+# Modern two-line prompt (the usual 2025–2026 look).
+# Always shows the folder you are in, git branch, and a clean ❯.
 
 "$schema" = "https://starship.rs/config-schema.json"
 
 add_newline = true
 command_timeout = 500
-palette = "catppuccin_mocha"
 
 format = """
-$directory\
-$git_branch\
-$git_status\
-$python\
-$nodejs\
-$docker_context\
-$cmd_duration\
-$line_break\
-$character\
-"""
-
-[palettes.catppuccin_mocha]
-rosewater = "#f5e0dc"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-
-[character]
-success_symbol = "[❯](bold green)"
-error_symbol = "[❯](bold red)"
+[in](bold #6c7086) $directory$git_branch$git_status$python$nodejs$docker_context$fill$cmd_duration$time
+$character"""
 
 [directory]
-truncation_length = 3
-truncate_to_repo = true
-style = "bold teal"
+style = "bold #89b4fa"
+truncation_length = 5
+truncate_to_repo = false
+truncation_symbol = "…/"
+home_symbol = "~"
 format = "[$path]($style) "
+repo_root_style = "bold #89b4fa"
+repo_root_format = "[$repo_root]($repo_root_style)[$path]($style) "
 
 [git_branch]
-symbol = "git "
-format = "[$symbol$branch]($style) "
-style = "bold mauve"
+style = "bold #cba6f7"
+format = "[on](#6c7086) [$branch]($style) "
 
 [git_status]
+style = "bold #f9e2af"
 format = "([$all_status$ahead_behind]($style) )"
-style = "bold yellow"
-conflicted = "x"
-ahead = "⇡${count}"
-behind = "⇣${count}"
-diverged = "⇕"
-untracked = "?"
-modified = "!"
-staged = "+"
-renamed = ">"
-deleted = "x"
+conflicted = "conflict "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "diverged "
+untracked = "? "
+modified = "! "
+staged = "+ "
+renamed = "renamed "
+deleted = "x "
+stashed = ""
 
 [python]
-symbol = "py "
-format = "[${symbol}${version}]($style) "
-style = "yellow"
+style = "#f9e2af"
+format = "[py $version]($style) "
 python_binary = ["python3", "python"]
+detect_extensions = ["py"]
 
 [nodejs]
-symbol = "node "
-format = "[${symbol}${version}]($style) "
-style = "green"
+style = "#a6e3a1"
+format = "[node $version]($style) "
 
 [docker_context]
-symbol = "docker "
-format = "[${symbol}$context]($style) "
-style = "blue"
+style = "#89b4fa"
+format = "[docker]($style) "
 only_with_files = true
 
 [cmd_duration]
-min_time = 500
+min_time = 400
+style = "#fab387"
 format = "[took $duration]($style) "
-style = "peach"
+
+[time]
+disabled = false
+style = "#6c7086"
+time_format = "%H:%M"
+format = "[$time]($style)"
+
+[fill]
+symbol = " "
+
+[character]
+success_symbol = "[❯](bold #a6e3a1)"
+error_symbol = "[❯](bold #f38ba8)"
+
+[username]
+show_always = false
+style_user = "bold #cba6f7"
+format = "[$user]($style) "
+
+[hostname]
+ssh_only = true
+style = "bold #94e2d5"
+format = "[@$hostname]($style) "
