@@ -15,6 +15,7 @@ configure_terminal() {
   install_file "${REPO_ROOT}/terminal/yazi/theme.toml" "${XDG_CONFIG_HOME}/yazi/theme.toml"
   install_file "${REPO_ROOT}/terminal/ptyxis/Workstation.palette" \
     "${XDG_DATA_HOME:-${HOME}/.local/share}/org.gnome.Ptyxis/palettes/Workstation.palette"
+  _terminal_theme_btop
 
   _terminal_install_nerd_font
   _terminal_theme_ptyxis
@@ -30,8 +31,35 @@ configure_terminal() {
   link_script "${REPO_ROOT}/scripts/preview-terminal.sh" "preview-terminal"
   link_script "${REPO_ROOT}/scripts/dotfiles-health.sh" "dotfiles-health"
   link_script "${REPO_ROOT}/scripts/theme-health.sh" "theme-health"
+  link_script "${REPO_ROOT}/scripts/desk-stats.sh" "stats"
+  link_script "${REPO_ROOT}/scripts/apply-look.sh" "apply-look"
 
   state_append_list "MODULES" "terminal"
+}
+
+_terminal_theme_btop() {
+  mkdir -p "${XDG_CONFIG_HOME}/btop/themes"
+  install_file "${REPO_ROOT}/terminal/btop.theme" "${XDG_CONFIG_HOME}/btop/themes/ubuntu-dotfiles.theme"
+  local conf="${XDG_CONFIG_HOME}/btop/btop.conf"
+  if is_dry_run; then
+    log_dry "set btop color_theme=ubuntu-dotfiles"
+    return 0
+  fi
+  mkdir -p "$(dirname "${conf}")"
+  if [[ -f "${conf}" ]] && grep -q '^color_theme' "${conf}"; then
+    local tmp
+    tmp="$(mktemp)"
+    awk '
+      /^color_theme/ {print "color_theme = \"ubuntu-dotfiles\""; next}
+      {print}
+    ' "${conf}" > "${tmp}"
+    mv "${tmp}" "${conf}"
+  elif [[ -f "${conf}" ]]; then
+    printf '\ncolor_theme = "ubuntu-dotfiles"\ntheme_background = False\n' >> "${conf}"
+  else
+    printf 'color_theme = "ubuntu-dotfiles"\ntheme_background = False\n' > "${conf}"
+  fi
+  log_success "btop theme: ubuntu-dotfiles"
 }
 
 _terminal_install_nerd_font() {

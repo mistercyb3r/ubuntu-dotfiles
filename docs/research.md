@@ -12,7 +12,8 @@ Decisions for Ubuntu 26.04 / GNOME 50 on a Latitude 5400 (Intel UHD 620, 16 GB).
 | Blur my Shell 72 | Claims 50 | **Do not install.** Conflicts with Ubuntu Dock overview highlight. Extra GPU cost on UHD 620. |
 | Dash to Dock from e.g.o | 105 supports 50 | Redundant with Ubuntu Dock. |
 | Clipboard Indicator | — | Redundant. GNOME 50 has a built-in clipboard. |
-| Vitals / dash-to-panel monitors | varies | **Skip.** Always-on sensors hurt battery. Use `btop` when needed. |
+| Vitals / dash-to-panel monitors | varies | **Skip.** Always-on sensors hurt battery. Use `stats` / `btop` when needed. |
+| Conky | X11-era desktop overlay | **Skip on GNOME Wayland.** Needs XWayland, stays running, looks wrong under Mutter. Use `stats` + Nordic `btop` instead. |
 | D2D Companion | 46–50 | Cosmetic dock motion. Skip. |
 
 This repo does not install extensions from extensions.gnome.org.

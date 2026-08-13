@@ -100,6 +100,12 @@ alias path='printf "%s\n" "${PATH}" | tr ":" "\n"'
 if command -v fastfetch >/dev/null 2>&1; then
   alias fetch='fastfetch'
 fi
+if command -v stats >/dev/null 2>&1; then
+  :
+elif [[ -x "${HOME}/.local/bin/stats" ]]; then
+  alias stats="${HOME}/.local/bin/stats"
+fi
+alias monitor='btop'
 if command -v cmatrix >/dev/null 2>&1; then
   alias matrix='cmatrix -u 8'
 fi

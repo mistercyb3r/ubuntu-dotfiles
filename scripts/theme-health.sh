@@ -92,6 +92,9 @@ check "${TMUX}" "${UDF_FG}" "tmux foreground"
 
 check "${GTK4}" "${UDF_CYAN}" "GTK4 frost accent"
 check "${GTK4}" "${UDF_BG}" "GTK4 window background"
+BTOP="${ROOT}/terminal/btop.theme"
+check "${BTOP}" "${UDF_CYAN}" "btop frost"
+check "${BTOP}" "${UDF_GREEN}" "btop aurora"
 check "${WALL}" "${UDF_POLAR_DARKEST:-#1F232B}" "wallpaper polar darkest"
 check "${WALL}" "${UDF_FROST_CYAN:-#88C0D0}" "wallpaper frost"
 
