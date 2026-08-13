@@ -1,5 +1,5 @@
-# Two-line 2026 developer prompt. Starship is the ONLY prompt engine.
-# Palette: theme/palette.md (deep dark / cyan / purple)
+# Two-line prompt. Starship is the ONLY prompt engine.
+# Colours from theme/palette.env (do not invent new hex values).
 
 "$schema" = "https://starship.rs/config-schema.json"
 
@@ -8,28 +8,28 @@ command_timeout = 400
 scan_timeout = 30
 
 format = """
-[╭─](bold #7dcfff) $username$hostname $directory$git_branch$git_status$python$nodejs$rust$docker_context$kubernetes$cmd_duration
-[╰─](bold #7dcfff)$character"""
+[╭─](bold #7DCFFF) $username$hostname $directory$git_branch$git_status$python$nodejs$rust$docker_context$kubernetes$cmd_duration
+[╰─](bold #7DCFFF)$character"""
 
 [character]
-success_symbol = "[❯](bold #9ece6a)"
-error_symbol = "[❯](bold #f7768e)"
+success_symbol = "[❯](bold #9ECE6A)"
+error_symbol = "[❯](bold #F7768E)"
 
 [directory]
-style = "bold #7dcfff"
+style = "bold #7DCFFF"
 truncation_length = 4
 truncate_to_repo = false
 truncation_symbol = "…/"
 home_symbol = "~"
 read_only = " ro"
-format = "[·](#565f89) [$path]($style)[$read_only](#e0af68) "
+format = "[·](#565F89) [$path]($style)[$read_only](#E0AF68) "
 
 [git_branch]
-style = "bold #bb9af7"
-format = "[·](#565f89) [$branch]($style) "
+style = "bold #BB9AF7"
+format = "[·](#565F89) [$branch]($style) "
 
 [git_status]
-style = "#e0af68"
+style = "#E0AF68"
 format = "([$all_status$ahead_behind]($style))"
 conflicted = "≠"
 ahead = "⇡${count}"
@@ -44,49 +44,49 @@ renamed = ">"
 deleted = "x"
 
 [python]
-style = "#e0af68"
-format = "[·](#565f89) [py $version]($style) "
+style = "#E0AF68"
+format = "[·](#565F89) [py $version]($style) "
 python_binary = ["python3", "python"]
 detect_extensions = ["py"]
 detect_files = ["pyproject.toml", "requirements.txt", ".python-version"]
 
 [nodejs]
-style = "#9ece6a"
-format = "[·](#565f89) [node $version]($style) "
+style = "#9ECE6A"
+format = "[·](#565F89) [node $version]($style) "
 detect_files = ["package.json", ".nvmrc"]
 
 [rust]
-style = "#ff9e64"
-format = "[·](#565f89) [rs $version]($style) "
+style = "#E0AF68"
+format = "[·](#565F89) [rs $version]($style) "
 detect_files = ["Cargo.toml"]
 
 [docker_context]
-style = "#7aa2f7"
-format = "[·](#565f89) [docker]($style) "
+style = "#7AA2F7"
+format = "[·](#565F89) [docker]($style) "
 only_with_files = true
 detect_files = ["docker-compose.yml", "compose.yml", "Dockerfile"]
 
 [kubernetes]
 disabled = false
-style = "#7aa2f7"
-format = "[·](#565f89) [k8s $context]($style) "
+style = "#7AA2F7"
+format = "[·](#565F89) [k8s $context]($style) "
 detect_files = ["kustomization.yaml", "Chart.yaml"]
 
 [username]
-style_user = "bold #bb9af7"
-style_root = "bold #f7768e"
+style_user = "bold #BB9AF7"
+style_root = "bold #F7768E"
 format = "[$user]($style)"
 show_always = true
 
 [hostname]
 ssh_only = false
-style = "bold #7dcfff"
+style = "bold #7DCFFF"
 format = "[@$hostname]($style)"
 
 [cmd_duration]
 min_time = 400
-style = "#ff9e64"
-format = "[·](#565f89) [took $duration]($style) "
+style = "#E0AF68"
+format = "[·](#565F89) [took $duration]($style) "
 
 [line_break]
 disabled = true

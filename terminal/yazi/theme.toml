@@ -1,18 +1,23 @@
+# Colours from theme/palette.env
+
 [manager]
-cwd = { fg = "#7dcfff", bold = true }
+cwd = { fg = "#7DCFFF", bold = true }
+
+hovered = { fg = "#D8DEE9", bg = "#1A2744" }
+preview_hovered = { underline = true }
 
 [status]
 separator_open = ""
 separator_close = ""
-mode_normal = { fg = "#0b0e14", bg = "#7dcfff", bold = true }
-mode_select = { fg = "#0b0e14", bg = "#bb9af7", bold = true }
+mode_normal = { fg = "#0B0E14", bg = "#7DCFFF", bold = true }
+mode_select = { fg = "#0B0E14", bg = "#BB9AF7", bold = true }
+mode_unset = { fg = "#0B0E14", bg = "#E0AF68", bold = true }
 
 [filetype]
 rules = [
-  { mime = "image/*", fg = "#bb9af7" },
-  { mime = "video/*", fg = "#7aa2f7" },
-  { mime = "audio/*", fg = "#9ece6a" },
-  { mime = "application/x-bittorrent", fg = "#e0af68" },
-  { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#ff9e64" },
-  { mime = "application/{pdf,doc,rtf}", fg = "#7dcfff" },
+  { mime = "image/*", fg = "#BB9AF7" },
+  { mime = "video/*", fg = "#7AA2F7" },
+  { mime = "audio/*", fg = "#9ECE6A" },
+  { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#E0AF68" },
+  { mime = "application/{pdf,doc,rtf}", fg = "#7DCFFF" },
 ]

@@ -28,7 +28,7 @@ zstyle ':completion:*:descriptions' format '%F{cyan}-- %d --%f'
 
 # Autosuggestions (right-arrow accepts). Muted grey matches the theme.
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#565f89'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=${UDF_MUTED:-#565F89}"
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=40
 
 _udf_plugin_dirs=(
@@ -70,15 +70,15 @@ unset _udf_f
 # Syntax highlighting last. Green valid / red invalid.
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[command]='fg=#9ece6a'
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#9ece6a'
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#9ece6a'
-ZSH_HIGHLIGHT_STYLES[function]='fg=#9ece6a'
-ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#f7768e,bold'
-ZSH_HIGHLIGHT_STYLES[path]='fg=#7dcfff,underline'
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#bb9af7'
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#bb9af7'
-ZSH_HIGHLIGHT_STYLES[comment]='fg=#565f89'
+ZSH_HIGHLIGHT_STYLES[command]="fg=${UDF_GREEN:-#9ECE6A}"
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=${UDF_GREEN:-#9ECE6A}"
+ZSH_HIGHLIGHT_STYLES[alias]="fg=${UDF_GREEN:-#9ECE6A}"
+ZSH_HIGHLIGHT_STYLES[function]="fg=${UDF_GREEN:-#9ECE6A}"
+ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=${UDF_RED:-#F7768E},bold"
+ZSH_HIGHLIGHT_STYLES[path]="fg=${UDF_CYAN:-#7DCFFF},underline"
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=${UDF_PURPLE:-#BB9AF7}"
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="fg=${UDF_PURPLE:-#BB9AF7}"
+ZSH_HIGHLIGHT_STYLES[comment]="fg=${UDF_MUTED:-#565F89}"
 
 _udf_hl_dirs=(
   /usr/share/zsh-syntax-highlighting

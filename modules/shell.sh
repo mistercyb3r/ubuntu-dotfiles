@@ -36,6 +36,9 @@ export STARSHIP_CONFIG="\${XDG_CONFIG_HOME:-\${HOME}/.config}/starship.toml"
 if [ -n "\${PS1:-}" ] && [ -f "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh" ]; then
   . "\${UBUNTU_DOTFILES_ROOT}/scripts/terminal-welcome.sh"
 fi
+if [ -n "\${PS1:-}" ] && [ -f "\${UBUNTU_DOTFILES_ROOT}/theme/palette.env" ]; then
+  . "\${UBUNTU_DOTFILES_ROOT}/theme/palette.env"
+fi
 if [ -n "\${PS1:-}" ] && [ -f "\${UBUNTU_DOTFILES_ROOT}/terminal/fzf.env" ]; then
   . "\${UBUNTU_DOTFILES_ROOT}/terminal/fzf.env"
 fi

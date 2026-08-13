@@ -202,6 +202,14 @@ else
   status warn "Super+T terminal" "gsettings unavailable here"
 fi
 
+if [[ -f "${ROOT}/scripts/theme-health.sh" ]]; then
+  if bash "${ROOT}/scripts/theme-health.sh"; then
+    status ok "Theme" "Kitty / Starship / tmux match theme/palette.env"
+  else
+    status fail "Theme" "palette mismatch — run theme-health"
+  fi
+fi
+
 printf '\n%s%d ok%s  %s%d warn%s  %s%d fail%s\n' \
   "${C_GREEN}" "${ok}" "${C_RESET}" \
   "${C_YELLOW}" "${warn}" "${C_RESET}" \

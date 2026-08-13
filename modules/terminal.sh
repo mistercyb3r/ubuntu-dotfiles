@@ -27,6 +27,7 @@ configure_terminal() {
   link_script "${REPO_ROOT}/scripts/check-secrets.sh" "check-secrets"
   link_script "${REPO_ROOT}/scripts/preview-terminal.sh" "preview-terminal"
   link_script "${REPO_ROOT}/scripts/dotfiles-health.sh" "dotfiles-health"
+  link_script "${REPO_ROOT}/scripts/theme-health.sh" "theme-health"
 
   state_append_list "MODULES" "terminal"
 }

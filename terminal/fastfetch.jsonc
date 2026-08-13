@@ -17,7 +17,7 @@
       "keys": "cyan",
       "title": "magenta"
     },
-    "brightColor": true,
+    "brightColor": false,
     "keyWidth": 10
   },
   "modules": [
