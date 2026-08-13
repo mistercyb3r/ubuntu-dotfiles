@@ -45,22 +45,23 @@ _terminal_install_nerd_font() {
   _look_install_nerd_font
 }
 
-# Apply Nord palette + subtle opacity to the default Ptyxis profile.
-# Ptyxis cannot source theme/palette.env; colours live in Workstation.palette
-# (mapped in theme/palette.md). Opacity is UDF_OPACITY from palette.env.
+# Apply Nord palette + subtle opacity to every Ptyxis profile.
+# Always writes dconf; do not skip just because a gsettings key lookup failed.
 _terminal_theme_ptyxis() {
   # shellcheck disable=SC1091
   . "${REPO_ROOT}/theme/palette.env"
   local opacity="${UDF_OPACITY:-0.92}"
-  local dest="${XDG_DATA_HOME:-${HOME}/.local/share}/org.gnome.Ptyxis/palettes/Workstation.palette"
+  local dest_dir="${XDG_DATA_HOME:-${HOME}/.local/share}/org.gnome.Ptyxis/palettes"
+  local dest="${dest_dir}/Workstation.palette"
+  local src="${REPO_ROOT}/terminal/ptyxis/Workstation.palette"
+
+  mkdir -p "${dest_dir}"
+  if [[ -f "${src}" ]]; then
+    install_file "${src}" "${dest}"
+  fi
 
   if [[ ! -f "${dest}" ]] && ! is_dry_run; then
     log_warn "Ptyxis palette was not installed at ${dest}"
-    return 0
-  fi
-
-  if ! command_exists gsettings && ! command_exists dconf; then
-    log_warn "gsettings/dconf unavailable; Ptyxis palette file is in place, profile not applied"
     return 0
   fi
 
@@ -71,25 +72,67 @@ _terminal_theme_ptyxis() {
     . "${REPO_ROOT}/gnome/look.sh"
   fi
 
-  local uuid=""
   _ptyxis_ensure_profile
-  uuid="${_PTYXIS_PROFILE_UUID:-}"
-  if [[ -z "${uuid}" ]]; then
-    log_warn "Could not resolve a Ptyxis profile; open Ptyxis once on Ubuntu, then re-run ./install.sh"
-    return 0
+  local uuid=""
+  local -a uuids=()
+  while IFS= read -r uuid; do
+    [[ -n "${uuid}" ]] && uuids+=("${uuid}")
+  done < <(_ptyxis_all_uuids)
+
+  if [[ ${#uuids[@]} -eq 0 ]]; then
+    uuids+=("${_PTYXIS_PROFILE_UUID:-ubuntu-dotfiles}")
   fi
 
-  local schema="org.gnome.Ptyxis.Profile:/org/gnome/Ptyxis/Profiles/${uuid}/"
-  log_info "Theming Ptyxis profile ${uuid} (Workstation palette, opacity ${opacity})"
+  for uuid in "${uuids[@]}"; do
+    log_info "Theming Ptyxis profile ${uuid} (Workstation, opacity ${opacity})"
+    _ptyxis_force_write "${uuid}" palette "'Workstation'"
+    _ptyxis_force_write "${uuid}" opacity "${opacity}"
+    _ptyxis_force_write "${uuid}" login-shell "true"
+    _ptyxis_force_write "${uuid}" use-custom-command "true"
+    _ptyxis_force_write "${uuid}" custom-command "'zsh'"
+    if fc-list 2>/dev/null | grep -qi 'JetBrainsMono Nerd Font'; then
+      _ptyxis_force_write "${uuid}" use-system-font "false"
+      _ptyxis_force_write "${uuid}" font-name "'JetBrainsMono Nerd Font 12'"
+    fi
+  done
+}
 
-  _ptyxis_profile_set "${schema}" "${uuid}" palette "'Workstation'" "'Workstation'"
-  _ptyxis_profile_set "${schema}" "${uuid}" opacity "${opacity}" "${opacity}"
-  _ptyxis_profile_set "${schema}" "${uuid}" login-shell "true" "true"
-  _ptyxis_profile_set "${schema}" "${uuid}" use-custom-command "true" "true"
-  _ptyxis_profile_set "${schema}" "${uuid}" custom-command "'zsh'" "'zsh'"
-  if fc-list 2>/dev/null | grep -qi 'JetBrainsMono Nerd Font'; then
-    _ptyxis_profile_set "${schema}" "${uuid}" use-system-font "false" "false"
-    _ptyxis_profile_set "${schema}" "${uuid}" font-name "'JetBrainsMono Nerd Font 12'" "'JetBrainsMono Nerd Font 12'"
+_ptyxis_all_uuids() {
+  local raw=""
+  if command_exists dconf; then
+    raw="$(dconf read /org/gnome/Ptyxis/profile-uuids 2>/dev/null || true)"
+  fi
+  if [[ -z "${raw}" ]] && command_exists gsettings; then
+    raw="$(gsettings get org.gnome.Ptyxis profile-uuids 2>/dev/null || true)"
+  fi
+  printf '%s\n' "${raw}" | tr -d "[]'," | tr ' ' '\n' | awk 'NF'
+  if [[ -n "${_PTYXIS_PROFILE_UUID:-}" ]]; then
+    printf '%s\n' "${_PTYXIS_PROFILE_UUID}"
+  fi
+}
+
+# dconf first — this is what actually changes a running Ptyxis profile.
+_ptyxis_force_write() {
+  local uuid="$1"
+  local key="$2"
+  local value="$3"
+  local dpath="/org/gnome/Ptyxis/Profiles/${uuid}/${key}"
+  local schema="org.gnome.Ptyxis.Profile:/org/gnome/Ptyxis/Profiles/${uuid}/"
+
+  if is_dry_run; then
+    log_dry "dconf write ${dpath} ${value}"
+    return 0
+  fi
+  if command_exists dconf; then
+    if dconf write "${dpath}" "${value}"; then
+      log_success "Ptyxis ${uuid} ${key} = ${value}"
+    else
+      log_warn "dconf write failed: ${dpath}"
+    fi
+  fi
+  if command_exists gsettings && gsettings list-relocatable-schemas 2>/dev/null | grep -qx org.gnome.Ptyxis.Profile; then
+    # shellcheck disable=SC2086
+    gsettings set "${schema}" "${key}" ${value} >/dev/null 2>&1 || true
   fi
 }
 
@@ -153,37 +196,6 @@ _ptyxis_ensure_uuid_listed() {
       dconf write /org/gnome/Ptyxis/profile-uuids "[${stripped}, '${uuid}']" || true
     fi
   fi
-}
-
-# Set a Ptyxis profile key via gsettings when the schema exists, else dconf.
-_ptyxis_profile_set() {
-  local schema_path="$1"
-  local uuid="$2"
-  local key="$3"
-  local gvalue="$4"
-  local dvalue="$5"
-  local dpath="/org/gnome/Ptyxis/Profiles/${uuid}/${key}"
-
-  if command_exists gsettings && declare -F _gset_rel >/dev/null 2>&1; then
-    if gsettings list-relocatable-schemas 2>/dev/null | grep -qx org.gnome.Ptyxis.Profile; then
-      if gsettings list-keys "${schema_path}" 2>/dev/null | grep -qx "${key}"; then
-        _gset_rel "${schema_path}" "${key}" "${gvalue}"
-        return 0
-      fi
-    fi
-  fi
-
-  if is_dry_run; then
-    log_dry "dconf write ${dpath} ${dvalue}"
-    return 0
-  fi
-  if command_exists dconf; then
-    if dconf write "${dpath}" "${dvalue}"; then
-      log_success "Ptyxis ${key} = ${dvalue}"
-      return 0
-    fi
-  fi
-  log_skip "Ptyxis profile key not available here: ${key}"
 }
 
 _terminal_prefer_ptyxis() {
