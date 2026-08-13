@@ -6,9 +6,10 @@
 # Extra extensions are a common source of breakage after GNOME version upgrades.
 
 gnome_document_extensions() {
-  log_info "GNOME extensions: none will be installed by this repository."
+  log_info "GNOME extensions: this repo does not enable extra Shell extensions."
   log_info "Ubuntu Dock and AppIndicator are already part of Ubuntu Desktop."
-  log_info "If you later want an extension, prefer one extension at a time and pin its version."
+  log_info "Extension Manager is installed with the look profile if you want one extra extension."
+  log_info "Prefer one extension at a time. Blur-my-Shell is not installed (breaks on GNOME upgrades)."
 }
 
 # Documented optional extensions (NOT installed):

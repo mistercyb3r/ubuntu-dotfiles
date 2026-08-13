@@ -46,7 +46,7 @@ Core tools from Ubuntu repositories where possible:
 
 Zsh, Starship, git, GitHub CLI (`gh`), OpenSSH **client**, build-essential, fzf, ripgrep, fd, bat, eza (if the archive has it), jq, tree, btop, htop, tmux, curl, wget, unzip, Python 3, pipx, uv, nvm + Node.js LTS, JetBrains Mono.
 
-Optional (full profile): Docker Engine (official Docker apt repo), Tailscale **package only**, GNOME Tweaks.
+Optional (full profile): Docker Engine (official Docker apt repo), Tailscale **package only**, GNOME Tweaks, themed look (neofetch/fastfetch, Papirus, Catppuccin terminal).
 
 See [docs/installed-software.md](docs/installed-software.md) for why each tool exists.
 
@@ -56,9 +56,10 @@ See [docs/installed-software.md](docs/installed-software.md) for why each tool e
 |------|-----------|
 | Shell | Zsh + Starship; marked block in `~/.zshrc` (existing content kept) |
 | Git | Shared defaults via `include.path`; **no** name/email in the repo |
-| Terminal | `~/.config/starship.toml`, `~/.tmux.conf` |
+| Terminal | Starship (Catppuccin), tmux, GNOME Terminal colours + light transparency |
 | SSH | Client defaults + example host file; **no** `sshd` |
-| GNOME | Dark mode, dock, workspaces, touchpad, power — **no extensions** |
+| GNOME | Dark purple Yaru, Papirus icons, floating dock — **no extra extensions** |
+| Look | `fastfetch`/`neofetch` greeting, `matrix` effect. See [docs/look.md](docs/look.md) |
 | Projects | `~/Projects/{personal,ai,web,python,homelab,experiments}` |
 | Performance | zram, SSD TRIM, `power-profiles-daemon` balanced |
 | Backups | Timestamped copies under `~/.local/share/ubuntu-dotfiles/backups/` |
@@ -92,6 +93,7 @@ Useful options:
 --no-docker     skip Docker
 --no-node       skip nvm / Node.js
 --no-python     skip pipx / uv (apt python3 is still installed)
+--no-look       skip themed desktop, terminal colours, and neofetch
 --dry-run       print actions only
 --yes           assume yes for prompts (still will not log into Tailscale)
 ```
@@ -185,6 +187,8 @@ Then put the MagicDNS name or Tailscale IP in `~/.ssh/config.d/10-homeserver.con
 | `server list` / `server ssh homeserver` | SSH to configured hosts |
 | `check-secrets` | crude pre-commit secret scan |
 | `setup-git-identity` | set `user.name` / `user.email` |
+| `fetch` | neofetch/fastfetch greeting |
+| `matrix` | cmatrix rain effect (`q` to quit) |
 
 Python: [docs/python.md](docs/python.md). Node: [docs/nodejs.md](docs/nodejs.md). Docker: [docs/docker.md](docs/docker.md).
 

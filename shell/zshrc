@@ -87,5 +87,14 @@ npx()  { _ubuntu_dotfiles_nvm_lazy; npx "$@"; }
 
 # pipx / uv live in ~/.local/bin (already on PATH)
 
+# Fetch greeting: once per top-level interactive shell. Skip in tmux/nested shells.
+if [[ -o interactive && -z "${UBUNTU_DOTFILES_NO_FETCH:-}" && "${SHLVL}" -le 1 ]]; then
+  if command -v fastfetch >/dev/null 2>&1; then
+    fastfetch
+  elif command -v neofetch >/dev/null 2>&1; then
+    neofetch
+  fi
+fi
+
 # Cursor / AI-friendly: show the repo root when inside a git checkout
 export UBUNTU_DOTFILES_SHELL=1

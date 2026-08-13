@@ -63,6 +63,11 @@ If `docker` is already on `PATH`, it is **not** replaced.
 | `fonts-jetbrains-mono` | Default programming font |
 | `fonts-firacode` | Optional ligature font, if packaged |
 | `gnome-tweaks` | Full profile only; settings UI. No extension dump |
+| `papirus-icon-theme` | Dark icon set for the look profile |
+| `neofetch` | Classic system greeting (requested) |
+| `fastfetch` | Faster greeting when the archive has it |
+| `cmatrix` | Optional terminal rain effect (`matrix`) |
+| `gnome-shell-extension-manager` | UI to add one extension yourself; none are enabled by us |
 | `power-profiles-daemon` | `balanced` / `performance` without TLP |
 | `systemd-zram-generator` or `zram-tools` | Compressed RAM swap on 16 GB |
 | `fstrim.timer` | Weekly SSD TRIM |

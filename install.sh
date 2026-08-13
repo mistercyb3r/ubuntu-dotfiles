@@ -20,6 +20,7 @@ Options:
   --no-docker     Skip Docker
   --no-node       Skip nvm / Node.js
   --no-python     Skip pipx / uv (Python 3 from apt is still installed)
+  --no-look       Skip the themed desktop/terminal look (neofetch, colours)
   --dry-run       Print actions without changing the system
   --yes, -y       Assume "yes" for confirmation prompts
   --help, -h      Show this help
@@ -38,6 +39,7 @@ SKIP_GNOME=0
 SKIP_DOCKER=0
 SKIP_NODE=0
 SKIP_PYTHON=0
+SKIP_LOOK=0
 INSTALL_PROFILE="full"
 
 while [[ $# -gt 0 ]]; do
@@ -48,12 +50,14 @@ while [[ $# -gt 0 ]]; do
       SKIP_GNOME=1
       SKIP_DOCKER=1
       SKIP_NODE=1
+      SKIP_LOOK=1
       shift
       ;;
     --no-gnome) SKIP_GNOME=1; shift ;;
     --no-docker) SKIP_DOCKER=1; shift ;;
     --no-node) SKIP_NODE=1; shift ;;
     --no-python) SKIP_PYTHON=1; shift ;;
+    --no-look) SKIP_LOOK=1; shift ;;
     --dry-run) DRY_RUN=1; shift ;;
     --yes|-y) ASSUME_YES=1; shift ;;
     --help|-h) usage; exit 0 ;;
@@ -65,7 +69,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-export DRY_RUN ASSUME_YES INSTALL_PROFILE SKIP_GNOME SKIP_DOCKER SKIP_NODE SKIP_PYTHON
+export DRY_RUN ASSUME_YES INSTALL_PROFILE SKIP_GNOME SKIP_DOCKER SKIP_NODE SKIP_PYTHON SKIP_LOOK
 
 print_banner() {
   printf '%s\n' "${C_BOLD}${C_CYAN}"
@@ -89,12 +93,14 @@ source_modules() {
     "${REPO_ROOT}/packages/terminal.sh" \
     "${REPO_ROOT}/packages/development.sh" \
     "${REPO_ROOT}/packages/optional.sh" \
+    "${REPO_ROOT}/packages/look.sh" \
     "${REPO_ROOT}/modules/shell.sh" \
     "${REPO_ROOT}/modules/git.sh" \
     "${REPO_ROOT}/modules/terminal.sh" \
     "${REPO_ROOT}/modules/ssh.sh" \
     "${REPO_ROOT}/modules/gnome.sh" \
     "${REPO_ROOT}/modules/fonts.sh" \
+    "${REPO_ROOT}/modules/look.sh" \
     "${REPO_ROOT}/modules/performance.sh" \
     "${REPO_ROOT}/modules/projects.sh" \
     "${REPO_ROOT}/modules/health.sh"
@@ -150,6 +156,8 @@ main() {
   log_step 6 "${INSTALL_TOTAL_STEPS}" "Configuring GNOME"
   configure_gnome
   configure_fonts
+  install_look_packages
+  configure_look
 
   log_step 7 "${INSTALL_TOTAL_STEPS}" "Configuring development tools"
   install_development_packages
@@ -189,6 +197,7 @@ ${C_BOLD}Useful commands:${C_RESET}
   new-project python x create a project under ~/Projects
   server list          SSH hosts from your config
   check-secrets        scan a directory before committing
+  fetch / matrix       greeting / cmatrix effect
 
 Documentation: ${REPO_ROOT}/README.md
 EOF

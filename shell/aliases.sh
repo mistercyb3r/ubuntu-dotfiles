@@ -68,3 +68,13 @@ alias myip='hostname -I'
 
 # Path helpers
 alias path='printf "%s\n" "${PATH}" | tr ":" "\n"'
+
+# Look
+if command -v fastfetch >/dev/null 2>&1; then
+  alias fetch='fastfetch'
+elif command -v neofetch >/dev/null 2>&1; then
+  alias fetch='neofetch'
+fi
+if command -v cmatrix >/dev/null 2>&1; then
+  alias matrix='cmatrix -u 8'
+fi

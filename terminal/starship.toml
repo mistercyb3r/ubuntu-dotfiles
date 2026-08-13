@@ -1,10 +1,10 @@
-# Professional, fast prompt. Avoids Nerd Font icons so JetBrains Mono works
-# without extra glyph packs. Keep modules cheap for laptop battery life.
+# Catppuccin Mocha colours. No Nerd Font icons required (JetBrains Mono).
 
 "$schema" = "https://starship.rs/config-schema.json"
 
 add_newline = true
 command_timeout = 500
+palette = "catppuccin_mocha"
 
 format = """
 $username\
@@ -20,6 +20,27 @@ $line_break\
 $character\
 """
 
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+overlay0 = "#6c7086"
+surface0 = "#313244"
+base = "#1e1e2e"
+
 [character]
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
@@ -27,12 +48,13 @@ error_symbol = "[❯](bold red)"
 [directory]
 truncation_length = 3
 truncate_to_repo = true
-style = "bold cyan"
+style = "bold teal"
+format = "[$path]($style) "
 
 [git_branch]
 symbol = ""
 format = "[$branch]($style) "
-style = "bold purple"
+style = "bold mauve"
 
 [git_status]
 format = "([$all_status$ahead_behind]($style) )"
@@ -49,12 +71,12 @@ renamed = "→"
 deleted = "×"
 
 [python]
-format = "[${version}]($style) "
+format = "[py ${version}]($style) "
 style = "yellow"
 python_binary = ["python3", "python"]
 
 [nodejs]
-format = "[${version}]($style) "
+format = "[node ${version}]($style) "
 style = "green"
 
 [docker_context]
@@ -65,13 +87,14 @@ only_with_files = true
 [cmd_duration]
 min_time = 500
 format = "[took $duration]($style) "
-style = "dimmed yellow"
+style = "peach"
 
 [username]
 show_always = false
+style_user = "bold lavender"
 format = "[$user]($style) "
 
 [hostname]
 ssh_only = true
 format = "[@$hostname]($style) "
-style = "dimmed green"
+style = "bold sapphire"
