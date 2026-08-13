@@ -14,6 +14,7 @@ configure_look() {
   _look_install_nerd_font
   _look_install_gtk_css
   _look_recolor_papirus_folders
+  _look_install_conky
 
   if [[ "${SKIP_GNOME:-0}" != "1" ]]; then
     # shellcheck disable=SC1091
@@ -86,4 +87,26 @@ _look_install_nerd_font() {
   rm -rf "${tmp}"
   fc-cache -f "${HOME}/.local/share/fonts" >/dev/null 2>&1 || true
   log_success "Installed JetBrainsMono Nerd Font under ${dest}"
+}
+
+_look_install_conky() {
+  mkdir -p "${XDG_CONFIG_HOME}/conky" "${XDG_CONFIG_HOME}/autostart"
+  install_file "${REPO_ROOT}/desktop/conky.conf" "${XDG_CONFIG_HOME}/conky/ubuntu-dotfiles.conf"
+  install_file "${REPO_ROOT}/desktop/conky.desktop" \
+    "${XDG_CONFIG_HOME}/autostart/ubuntu-dotfiles-conky.desktop"
+  link_script "${REPO_ROOT}/scripts/desktop-stats.sh" "desktop-stats"
+
+  if ! command_exists conky; then
+    log_warn "conky is not installed; desktop stats will start after the next ./install.sh"
+    return 0
+  fi
+  if [[ -z "${DISPLAY:-}" && -z "${WAYLAND_DISPLAY:-}" ]]; then
+    log_info "Conky will start at the next GNOME login (autostart)"
+    return 0
+  fi
+  if is_dry_run; then
+    log_dry "desktop-stats start"
+    return 0
+  fi
+  bash "${REPO_ROOT}/scripts/desktop-stats.sh" start || log_warn "Could not start Conky in this session"
 }

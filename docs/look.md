@@ -42,9 +42,10 @@ Research notes: [research.md](research.md).
 fetch              # Fastfetch again
 preview-terminal   # show the intended look
 dotfiles-health    # green / yellow / red proof
-stats              # Nordic CPU / RAM / disk / battery card (on demand)
-btop               # live graphs, same palette
-# Conky is not installed: it fights GNOME 50 Wayland and draws forever on UHD 620.
+stats              # one-shot Nordic card in the terminal
+btop               # live graphs in the terminal
+desktop-stats      # permanent Conky overlay (autostarts)
+desktop-stats stop # remove the overlay until next login
 z name             # jump to a frequent directory
 ll                 # eza with icons
 y                  # Yazi (if packaged)

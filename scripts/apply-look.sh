@@ -24,6 +24,9 @@ SKIP_GNOME=0
 configure_look
 _terminal_theme_ptyxis
 _terminal_prefer_ptyxis
+if [[ -x "${ROOT}/scripts/desktop-stats.sh" ]]; then
+  bash "${ROOT}/scripts/desktop-stats.sh" start || true
+fi
 
 printf '\n--- after apply ---\n'
 if command_exists gsettings; then

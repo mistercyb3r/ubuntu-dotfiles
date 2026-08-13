@@ -9,6 +9,7 @@ LOOK_PACKAGES=(
   fonts-inter
   gnome-tweaks
   gnome-shell-extension-manager
+  wmctrl
   cmatrix
   unzip
   xz-utils
@@ -21,7 +22,12 @@ install_look_packages() {
     return 0
   fi
 
-  log_info "Installing desktop look packages (Yaru / Papirus)"
+  log_info "Installing desktop look packages (Yaru / Papirus / Conky)"
   apt_install_missing "${LOOK_PACKAGES[@]}"
+  if apt_package_available conky-all; then
+    apt_install_missing conky-all
+  else
+    apt_install_missing conky
+  fi
   state_append_list "MODULES" "look-packages"
 }
