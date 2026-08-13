@@ -71,6 +71,37 @@ else
   echo "sudo keepalive trap uses the safe helper."
 fi
 
+echo "Checking Fastfetch 2.57 display keys in terminal/fastfetch.jsonc..."
+_ff_cfg="${ROOT}/terminal/fastfetch.jsonc"
+if [[ ! -f "${_ff_cfg}" ]]; then
+  echo "FAIL: missing ${_ff_cfg}"
+  fail=1
+elif grep -E '^[[:space:]]*"keyWidth"' "${_ff_cfg}"; then
+  echo "FAIL: display.keyWidth is not valid in Fastfetch 2.57.1 (use display.key.width)"
+  fail=1
+else
+  echo "No unsupported top-level display.keyWidth."
+fi
+if command -v fastfetch >/dev/null 2>&1; then
+  _ff_out=""
+  set +e
+  _ff_out="$(fastfetch --config "${_ff_cfg}" 2>&1)"
+  _ff_rc=$?
+  set -e
+  if printf '%s\n' "${_ff_out}" | grep -qi 'JsonConfig Error'; then
+    echo "FAIL: fastfetch --config reported JsonConfig Error"
+    printf '%s\n' "${_ff_out}"
+    fail=1
+  elif [[ "${_ff_rc}" -ne 0 ]]; then
+    echo "WARN: fastfetch --config exited ${_ff_rc} (no JsonConfig Error)"
+  else
+    echo "fastfetch --config ${_ff_cfg}: OK"
+  fi
+  unset _ff_out _ff_rc
+else
+  echo "fastfetch not installed here; skipped live config parse (run on Ubuntu 26.04)"
+fi
+
 if command -v shellcheck >/dev/null 2>&1; then
   echo "Running shellcheck..."
   # SC1091: sourced files use runtime paths; SC1090: dynamic source in install.sh

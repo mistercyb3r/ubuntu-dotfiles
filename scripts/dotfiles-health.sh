@@ -66,10 +66,23 @@ fi
 
 if have fastfetch; then
   ff_cfg="${XDG_CONFIG_HOME:-${HOME}/.config}/fastfetch/config.jsonc"
-  if [[ -f "${ff_cfg}" ]]; then
-    status ok "Fastfetch" "$(command -v fastfetch)  config ${ff_cfg}"
+  [[ -f "${ff_cfg}" ]] || ff_cfg="${ROOT}/terminal/fastfetch.jsonc"
+  if [[ ! -f "${ff_cfg}" ]]; then
+    status fail "Fastfetch" "config missing — re-run ./install.sh"
   else
-    status warn "Fastfetch" "binary present, ${ff_cfg} missing — re-run ./install.sh"
+    _ff_probe=""
+    set +e
+    _ff_probe="$(fastfetch --config "${ff_cfg}" 2>&1)"
+    _ff_rc=$?
+    set -e
+    if printf '%s\n' "${_ff_probe}" | grep -qi 'JsonConfig Error'; then
+      status fail "Fastfetch" "invalid config ${ff_cfg} (JsonConfig Error)"
+    elif [[ "${_ff_rc}" -ne 0 ]]; then
+      status warn "Fastfetch" "config ${ff_cfg} ran with exit ${_ff_rc}"
+    else
+      status ok "Fastfetch" "$(command -v fastfetch)  config ${ff_cfg}"
+    fi
+    unset _ff_probe _ff_rc
   fi
 else
   status fail "Fastfetch" "not on PATH — greeting will be empty. Re-run ./install.sh"

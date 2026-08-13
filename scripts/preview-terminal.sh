@@ -41,7 +41,23 @@ section "1. Fastfetch"
 if command -v fastfetch >/dev/null 2>&1; then
   cfg="${XDG_CONFIG_HOME:-${HOME}/.config}/fastfetch/config.jsonc"
   [[ -f "${cfg}" ]] || cfg="${ROOT}/terminal/fastfetch.jsonc"
-  UBUNTU_DOTFILES_NO_FETCH=1 fastfetch --config "${cfg}" || fastfetch
+  _ff_out=""
+  _ff_err=0
+  set +e
+  _ff_out="$(UBUNTU_DOTFILES_NO_FETCH=1 fastfetch --config "${cfg}" 2>&1)"
+  _ff_err=$?
+  set -e
+  if printf '%s\n' "${_ff_out}" | grep -qi 'JsonConfig Error'; then
+    printf '%sFastfetch rejected the config:%s %s\n' "${C_RED}" "${C_RESET}" "${cfg}"
+    printf '%s\n' "${_ff_out}"
+    printf '%sFix terminal/fastfetch.jsonc for this Fastfetch version, then re-run ./install.sh%s\n' "${C_YELLOW}" "${C_RESET}"
+  elif [[ "${_ff_err}" -ne 0 ]]; then
+    printf '%sfastfetch --config failed (exit %s). Not falling back to a default theme.%s\n' "${C_RED}" "${_ff_err}" "${C_RESET}"
+    printf '%s\n' "${_ff_out}"
+  else
+    printf '%s\n' "${_ff_out}"
+  fi
+  unset _ff_out _ff_err
 else
   printf '%sfastfetch is not on this machine (expected on Windows).%s\n' "${C_YELLOW}" "${C_RESET}"
   printf 'On Ubuntu it prints a compact Ubuntu logo + host / CPU / RAM / Tailscale.\n'

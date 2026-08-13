@@ -18,7 +18,9 @@
       "title": "magenta"
     },
     "brightColor": false,
-    "keyWidth": 10
+    "key": {
+      "width": 10
+    }
   },
   "modules": [
     {
