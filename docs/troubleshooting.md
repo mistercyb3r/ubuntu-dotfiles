@@ -22,6 +22,12 @@ or:
 bash gnome/settings.sh
 ```
 
+## Installer exits after apt packages (`kill <pid>` in `bash -x`)
+
+That `kill` is the sudo-keepalive EXIT trap. The real abort was `set -o pipefail` plus `state_get`: a missing state key made `grep` return 1, so `current="$(state_get MODULES)"` failed and `set -e` stopped the script with no error message.
+
+Fixed in `lib/common.sh` (`state_get` always returns 0 for a missing key) and `lib/os.sh` (keepalive PID is checked before kill). Re-run `./install.sh`.
+
 ## Fastfetch / two-line prompt do not appear
 
 The Ubuntu default terminal often still starts **bash**, so the zsh config never loads.

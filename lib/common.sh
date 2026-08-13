@@ -236,10 +236,18 @@ state_set() {
   mv "${tmp}" "${DOTFILES_STATE_FILE}"
 }
 
+# Missing keys are a valid empty result. Must always return 0.
+# Under `set -o pipefail`, a grep no-match (exit 1) would otherwise abort
+# `current="$(state_get …)"` and take the whole installer down with it.
 state_get() {
   local key="$1"
+  local line=""
   [[ -f "${DOTFILES_STATE_FILE}" ]] || return 0
-  grep "^${key}=" "${DOTFILES_STATE_FILE}" 2>/dev/null | tail -n1 | cut -d= -f2-
+  line="$(grep "^${key}=" "${DOTFILES_STATE_FILE}" 2>/dev/null | tail -n1 || true)"
+  if [[ -n "${line}" ]]; then
+    printf '%s\n' "${line#*=}"
+  fi
+  return 0
 }
 
 state_append_list() {

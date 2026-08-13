@@ -86,11 +86,37 @@ os_assert_sudo() {
   if ! sudo -v; then
     die "Could not obtain sudo credentials. The installer needs them for package installation."
   fi
-  # Keep sudo alive during a long install.
-  if [[ -z "${SUDO_KEEPALIVE_PID:-}" ]]; then
+  # Keep sudo alive during a long install. PID is namespaced and never $$ / PPID.
+  if [[ -z "${UDF_SUDO_KEEPALIVE_PID:-}" ]]; then
     ( while true; do sleep 60; sudo -n true || exit; done ) 2>/dev/null &
-    SUDO_KEEPALIVE_PID=$!
-    trap 'kill "${SUDO_KEEPALIVE_PID}" 2>/dev/null || true' EXIT
+    UDF_SUDO_KEEPALIVE_PID=$!
+    if [[ -z "${UDF_SUDO_KEEPALIVE_PID}" \
+       || "${UDF_SUDO_KEEPALIVE_PID}" == "$$" \
+       || "${UDF_SUDO_KEEPALIVE_PID}" == "${PPID}" ]]; then
+      log_warn "sudo keepalive PID was unsafe; not starting a keepalive loop"
+      UDF_SUDO_KEEPALIVE_PID=""
+      return 0
+    fi
+    trap '_udf_stop_sudo_keepalive' EXIT
+  fi
+}
+
+# EXIT trap only. Never kill the installer ($$) or its parent.
+_udf_stop_sudo_keepalive() {
+  local pid="${UDF_SUDO_KEEPALIVE_PID:-}"
+  UDF_SUDO_KEEPALIVE_PID=""
+  if [[ -z "${pid}" ]]; then
+    return 0
+  fi
+  if [[ "${pid}" == "$$" || "${pid}" == "${PPID}" ]]; then
+    return 0
+  fi
+  if [[ ! "${pid}" =~ ^[0-9]+$ ]]; then
+    return 0
+  fi
+  if [[ -d "/proc/${pid}" ]]; then
+    kill "${pid}" 2>/dev/null || true
+    wait "${pid}" 2>/dev/null || true
   fi
 }
 

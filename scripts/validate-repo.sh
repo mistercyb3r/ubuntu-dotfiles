@@ -23,6 +23,54 @@ else
   echo "No hard-coded home paths in scripts."
 fi
 
+echo "Checking state_get does not abort under set -euo pipefail when a key is missing..."
+_state_test_dir="$(mktemp -d)"
+if ! bash -euo pipefail -c "
+  # shellcheck disable=SC1091
+  . \"${ROOT}/lib/common.sh\"
+  DOTFILES_STATE_DIR=\"${_state_test_dir}\"
+  DOTFILES_CONFIG_DIR=\"${_state_test_dir}/config\"
+  DOTFILES_BACKUP_ROOT=\"${_state_test_dir}/backups\"
+  DOTFILES_LOG_DIR=\"${_state_test_dir}/logs\"
+  DOTFILES_STATE_FILE=\"${_state_test_dir}/state\"
+  XDG_BIN_HOME=\"${_state_test_dir}/bin\"
+  DRY_RUN=0
+  mkdir -p \"\${DOTFILES_STATE_DIR}\"
+  : > \"\${DOTFILES_STATE_FILE}\"
+  val=\"\$(state_get MODULES)\"
+  [[ -z \"\${val}\" ]]
+  state_append_list MODULES apt
+  val=\"\$(state_get MODULES)\"
+  [[ \"\${val}\" == apt ]]
+  state_append_list MODULES apt
+  val=\"\$(state_get MODULES)\"
+  [[ \"\${val}\" == apt ]]
+  state_append_list MODULES shell
+  val=\"\$(state_get MODULES)\"
+  [[ \"\${val}\" == 'apt shell' ]]
+"; then
+  echo "FAIL: state_get/state_append_list aborted or returned the wrong value under pipefail"
+  fail=1
+else
+  echo "state_get pipefail regression: OK"
+fi
+rm -rf "${_state_test_dir}"
+
+echo "Checking installer kill usage is namespaced and never targets \$\$..."
+if grep -RIn --include='*.sh' -E 'kill[[:space:]]+(\$\$|\$PPID|\$\{?PPID|\$\{?\$)' "${ROOT}" \
+  | grep -v 'validate-repo.sh'; then
+  echo "FAIL: unsafe kill of installer or parent PID"
+  fail=1
+else
+  echo "No kill \$\$ / \$PPID in scripts."
+fi
+if grep -RIn --include='*.sh' -E "^[[:space:]]*trap .*kill" "${ROOT}"; then
+  echo "FAIL: raw kill still used in an EXIT trap"
+  fail=1
+else
+  echo "sudo keepalive trap uses the safe helper."
+fi
+
 if command -v shellcheck >/dev/null 2>&1; then
   echo "Running shellcheck..."
   # SC1091: sourced files use runtime paths; SC1090: dynamic source in install.sh
