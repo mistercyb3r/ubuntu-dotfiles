@@ -1,63 +1,60 @@
 # Desktop and terminal look
 
-The full installer applies a dark, slightly modded developer theme. It is optional.
+This is the stack people usually rice Ubuntu with in 2025–2026, kept light enough for a Latitude 5400.
 
 ```bash
-./install.sh            # includes the look
-./install.sh --no-look  # keep the plainer developer defaults
+cd ~/ubuntu-dotfiles
+git pull
+./install.sh
 ```
 
-Re-apply only the look after a GNOME login:
-
-```bash
-bash gnome/look.sh
-```
+Skip it: `./install.sh --no-look`
 
 ## What you get
 
-| Area | Change |
-|------|--------|
-| GNOME | Dark mode, purple Yaru accent, Papirus-Dark icons |
-| Dock | Floating, 65% opacity, auto-hide |
-| Wallpaper | Stock Ubuntu dark wallpaper (no random downloads) |
-| Terminal | Catppuccin Mocha colours, 12% transparency, JetBrains Mono |
-| Prompt | Starship with the same palette |
-| Greeting | `fastfetch` if installed, otherwise `neofetch` |
-| Effect | `cmatrix` (run `matrix`) |
+| Piece | Why it is the current default online |
+|-------|--------------------------------------|
+| **Kitty** | GPU terminal, transparency, cursor trail |
+| **JetBrainsMono Nerd Font** | Icons in the prompt and `eza` |
+| **Catppuccin Mocha** | The palette almost every rice uses |
+| **Starship** | Fast prompt (instead of Oh My Zsh / Powerlevel10k) |
+| **zsh-autosuggestions** | Grey ghost text as you type |
+| **zsh-syntax-highlighting** | Green valid commands, red typos |
+| **fastfetch** | Replaced neofetch for most people |
+| **eza --icons** | Fancy `ls` |
+| **zoxide** | `z project` jumps to frequent dirs |
+| **Papirus + purple Yaru** | Dark desktop without a fragile GTK theme zip |
+| **cmatrix / pipes** | Optional toys, not on startup |
 
-No unofficial GNOME extensions are installed. Blur-my-Shell and similar break on GNOME upgrades. Use **Extension Manager** yourself if you want one extra extension.
+Not installed on purpose:
 
-## Terminal greeting
+- **Hyprland** — different desktop, worse battery/stability on this laptop
+- **Oh My Zsh** — slow; Starship + two plugins is the modern equivalent
+- **Blur my Shell** — pretty, but it stutters on Intel UHD 620
+- Theme PPAs and random `curl \| sh` rices
 
-Shown once on an interactive top-level shell. Not shown inside tmux panes or nested shells.
+## Everyday commands
 
-Turn it off:
+```bash
+# Super+T  →  Kitty
+fetch      # fastfetch / neofetch
+matrix     # green rain (q to quit)
+pipes      # colourful pipes (Ctrl-C to quit)
+z name     # jump to a directory you use often
+ll         # eza with icons
+```
+
+Turn the greeting off:
 
 ```bash
 echo 'export UBUNTU_DOTFILES_NO_FETCH=1' >> ~/.zshrc.local
 ```
 
-Run it anytime:
+## After install
 
-```bash
-fetch
-neofetch
-fastfetch
-```
+1. `git pull && ./install.sh`
+2. Log out and back in (font + default terminal)
+3. Open **Kitty** with Super+T
+4. If icons look like boxes, the font cache needed a session restart — log out once more
 
-## Matrix effect
-
-```bash
-matrix
-# or: cmatrix -u 8
-```
-
-`q` quits. This is a toy; it is not started automatically.
-
-## Why not a full “rice”
-
-- No theme PPAs
-- No curl-piped ricing scripts
-- No dozen GNOME extensions
-- Transparency stays low so text stays readable on the Latitude panel
-- Fetch is skipped in subshells so startup stays fast
+GNOME Terminal is still themed as a fallback (Ctrl+Alt+T on some Ubuntu images).

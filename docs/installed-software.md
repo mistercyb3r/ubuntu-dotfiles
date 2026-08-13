@@ -64,9 +64,14 @@ If `docker` is already on `PATH`, it is **not** replaced.
 | `fonts-firacode` | Optional ligature font, if packaged |
 | `gnome-tweaks` | Full profile only; settings UI. No extension dump |
 | `papirus-icon-theme` | Dark icon set for the look profile |
-| `neofetch` | Classic system greeting (requested) |
-| `fastfetch` | Faster greeting when the archive has it |
-| `cmatrix` | Optional terminal rain effect (`matrix`) |
+| `kitty` | GPU terminal with transparency and cursor trail |
+| `zsh-autosuggestions` | Ghost-text suggestions (the usual fancy zsh effect) |
+| `zsh-syntax-highlighting` | Live red/green command colouring |
+| `zoxide` | Fast directory jumper (`z`) |
+| `neofetch` | Classic greeting fallback |
+| `fastfetch` | Current greeting (replaces neofetch when packaged) |
+| `cmatrix` | Optional rain effect (`matrix`) |
+| JetBrainsMono Nerd Font | Official nerd-fonts release; icons in prompt and `eza` |
 | `gnome-shell-extension-manager` | UI to add one extension yourself; none are enabled by us |
 | `power-profiles-daemon` | `balanced` / `performance` without TLP |
 | `systemd-zram-generator` or `zram-tools` | Compressed RAM swap on 16 GB |

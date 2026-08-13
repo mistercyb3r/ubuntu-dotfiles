@@ -91,3 +91,30 @@ zsh-startup() {
     time zsh -lic 'exit'
   done
 }
+
+# Short colourful pipes animation (popular rice toy). q / Ctrl-C to stop.
+pipes() {
+  local f=0; local a=()
+  local x=$((COLUMNS/2)) y=$((LINES/2))
+  local d=0 n
+  tput civis
+  trap 'tput cnorm; tput sgr0; clear; return 0' INT
+  while true; do
+    n=$((RANDOM % 4))
+    [[ $((RANDOM % 6)) -eq 0 ]] && d=$n
+    case $d in
+      0) ((y--));;
+      1) ((x++));;
+      2) ((y++));;
+      3) ((x--));;
+    esac
+    ((x < 1)) && x=$COLUMNS
+    ((x > COLUMNS)) && x=1
+    ((y < 1)) && y=$LINES
+    ((y > LINES)) && y=1
+    tput cup "$y" "$x"
+    printf '\e[3%d;1m▄' $((f % 6 + 1))
+    f=$((f + 1))
+    sleep 0.02
+  done
+}

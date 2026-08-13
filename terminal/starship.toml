@@ -1,4 +1,5 @@
-# Catppuccin Mocha colours. No Nerd Font icons required (JetBrains Mono).
+# Catppuccin Mocha + Nerd Font / Powerline symbols.
+# Pair with JetBrainsMono Nerd Font in Kitty.
 
 "$schema" = "https://starship.rs/config-schema.json"
 
@@ -7,8 +8,6 @@ command_timeout = 500
 palette = "catppuccin_mocha"
 
 format = """
-$username\
-$hostname\
 $directory\
 $git_branch\
 $git_status\
@@ -22,24 +21,16 @@ $character\
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
 pink = "#f5c2e7"
 mauve = "#cba6f7"
 red = "#f38ba8"
-maroon = "#eba0ac"
 peach = "#fab387"
 yellow = "#f9e2af"
 green = "#a6e3a1"
 teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
 blue = "#89b4fa"
 lavender = "#b4befe"
 text = "#cdd6f4"
-subtext1 = "#bac2de"
-overlay0 = "#6c7086"
-surface0 = "#313244"
-base = "#1e1e2e"
 
 [character]
 success_symbol = "[❯](bold green)"
@@ -52,35 +43,37 @@ style = "bold teal"
 format = "[$path]($style) "
 
 [git_branch]
-symbol = ""
-format = "[$branch]($style) "
+symbol = "git "
+format = "[$symbol$branch]($style) "
 style = "bold mauve"
 
 [git_status]
 format = "([$all_status$ahead_behind]($style) )"
 style = "bold yellow"
-conflicted = "conflict"
-ahead = "↑${count}"
-behind = "↓${count}"
-diverged = "↕"
+conflicted = "x"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕"
 untracked = "?"
-stashed = ""
-modified = "*"
+modified = "!"
 staged = "+"
-renamed = "→"
-deleted = "×"
+renamed = ">"
+deleted = "x"
 
 [python]
-format = "[py ${version}]($style) "
+symbol = "py "
+format = "[${symbol}${version}]($style) "
 style = "yellow"
 python_binary = ["python3", "python"]
 
 [nodejs]
-format = "[node ${version}]($style) "
+symbol = "node "
+format = "[${symbol}${version}]($style) "
 style = "green"
 
 [docker_context]
-format = "[docker:$context]($style) "
+symbol = "docker "
+format = "[${symbol}$context]($style) "
 style = "blue"
 only_with_files = true
 
@@ -88,13 +81,3 @@ only_with_files = true
 min_time = 500
 format = "[took $duration]($style) "
 style = "peach"
-
-[username]
-show_always = false
-style_user = "bold lavender"
-format = "[$user]($style) "
-
-[hostname]
-ssh_only = true
-format = "[@$hostname]($style) "
-style = "bold sapphire"

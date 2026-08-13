@@ -9,10 +9,10 @@ alias projects='cd "${HOME}/Projects"'
 
 # Listing: eza when present, otherwise GNU ls
 if command -v eza >/dev/null 2>&1; then
-  alias ls='eza --group-directories-first --git'
-  alias ll='eza -l --group-directories-first --git --header'
-  alias la='eza -la --group-directories-first --git --header'
-  alias lt='eza -T --level=2 --group-directories-first'
+  alias ls='eza --group-directories-first --git --icons'
+  alias ll='eza -l --group-directories-first --git --header --icons'
+  alias la='eza -la --group-directories-first --git --header --icons'
+  alias lt='eza -T --level=2 --group-directories-first --icons'
 else
   alias ls='ls --color=auto --group-directories-first'
   alias ll='ls -lh --color=auto --group-directories-first'

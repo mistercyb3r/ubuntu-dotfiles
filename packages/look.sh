@@ -1,19 +1,26 @@
 #!/usr/bin/env bash
-# Visual packages for the optional "modded" look.
-# Ubuntu archive only. No theme PPAs, no random GitHub rices.
+# Popular 2025–2026 Ubuntu look: Kitty, Nerd Font, zsh effects, fastfetch.
+# Ubuntu archive packages plus one official Nerd Fonts GitHub release.
 
 LOOK_PACKAGES=(
-  neofetch
+  kitty
+  zsh-autosuggestions
+  zsh-syntax-highlighting
   papirus-icon-theme
   yaru-theme-gtk
   yaru-theme-icon
   gnome-tweaks
   gnome-shell-extension-manager
+  neofetch
   cmatrix
+  unzip
+  xz-utils
+  fontconfig
 )
 
 LOOK_OPTIONAL=(
   fastfetch
+  zoxide
 )
 
 install_look_packages() {
@@ -22,7 +29,7 @@ install_look_packages() {
     return 0
   fi
 
-  log_info "Installing visual packages (neofetch, icons, terminal extras)"
+  log_info "Installing the current popular Ubuntu look stack"
   apt_install_missing "${LOOK_PACKAGES[@]}"
   apt_install_missing "${LOOK_OPTIONAL[@]}"
   state_append_list "MODULES" "look-packages"

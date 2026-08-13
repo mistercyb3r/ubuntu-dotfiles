@@ -27,7 +27,11 @@ gnome_apply_look() {
   fi
 
   _gset org.gnome.desktop.interface cursor-theme "'Yaru'"
-  _gset org.gnome.desktop.interface monospace-font-name "'JetBrains Mono 12'"
+  if fc-list 2>/dev/null | grep -qi 'JetBrainsMono Nerd Font'; then
+    _gset org.gnome.desktop.interface monospace-font-name "'JetBrainsMono Nerd Font 12'"
+  else
+    _gset org.gnome.desktop.interface monospace-font-name "'JetBrains Mono 12'"
+  fi
   _gset org.gnome.desktop.interface enable-animations "true"
 
   # Dock: floating, slightly transparent, not a full-width bar.
@@ -37,7 +41,7 @@ gnome_apply_look() {
   _gset org.gnome.shell.extensions.dash-to-dock extend-height "false"
   _gset org.gnome.shell.extensions.dash-to-dock dash-max-icon-size "40"
   _gset org.gnome.shell.extensions.dash-to-dock transparency-mode "'FIXED'"
-  _gset org.gnome.shell.extensions.dash-to-dock background-opacity "0.65"
+  _gset org.gnome.shell.extensions.dash-to-dock background-opacity "0.55"
   _gset org.gnome.shell.extensions.dash-to-dock custom-theme-shrink "true"
   _gset org.gnome.shell.extensions.dash-to-dock dock-position "'BOTTOM'"
 
@@ -45,22 +49,45 @@ gnome_apply_look() {
 }
 
 _look_set_wallpaper() {
-  local wp
-  for wp in \
-    /usr/share/backgrounds/ubuntu-wallpaper-d.png \
-    /usr/share/backgrounds/ubuntu-wallpaper-u.png \
-    /usr/share/backgrounds/ubuntu-default-greyscale-wallpaper.png \
-    /usr/share/backgrounds/warty-final-ubuntu.png
-  do
-    if [[ -f "${wp}" ]]; then
-      _gset org.gnome.desktop.background picture-uri "'file://${wp}'"
-      _gset org.gnome.desktop.background picture-uri-dark "'file://${wp}'"
-      _gset org.gnome.desktop.background picture-options "'zoom'"
-      log_success "Wallpaper: ${wp}"
-      return 0
+  local dest="${XDG_DATA_HOME:-${HOME}/.local/share}/backgrounds/ubuntu-dotfiles-mocha.jpg"
+  local url="https://raw.githubusercontent.com/catppuccin/wallpapers/main/os/ubuntu.png"
+  local wp=""
+
+  if [[ -f "${dest}" ]]; then
+    wp="${dest}"
+  elif ! is_dry_run && command_exists curl; then
+    mkdir -p "$(dirname "${dest}")"
+    if curl -fsSL "${url}" -o "${dest}"; then
+      wp="${dest}"
+      log_success "Downloaded Catppuccin Ubuntu wallpaper"
     fi
-  done
-  log_skip "No stock Ubuntu wallpaper found; left the current one"
+  elif is_dry_run; then
+    log_dry "download wallpaper ${url} -> ${dest}"
+  fi
+
+  if [[ -z "${wp}" ]]; then
+    local candidate
+    for candidate in \
+      /usr/share/backgrounds/ubuntu-wallpaper-d.png \
+      /usr/share/backgrounds/ubuntu-wallpaper-u.png \
+      /usr/share/backgrounds/ubuntu-default-greyscale-wallpaper.png \
+      /usr/share/backgrounds/warty-final-ubuntu.png
+    do
+      if [[ -f "${candidate}" ]]; then
+        wp="${candidate}"
+        break
+      fi
+    done
+  fi
+
+  if [[ -n "${wp}" ]]; then
+    _gset org.gnome.desktop.background picture-uri "'file://${wp}'"
+    _gset org.gnome.desktop.background picture-uri-dark "'file://${wp}'"
+    _gset org.gnome.desktop.background picture-options "'zoom'"
+    log_success "Wallpaper: ${wp}"
+  else
+    log_skip "No wallpaper found; left the current one"
+  fi
 }
 
 # Catppuccin Mocha in GNOME Terminal, with light transparency.
@@ -81,7 +108,7 @@ gnome_apply_terminal_theme() {
   fi
 
   local schema="org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${id}/"
-  log_info "Theming GNOME Terminal profile ${id} (Catppuccin Mocha, 12% transparency)"
+  log_info "Theming GNOME Terminal profile ${id} (Catppuccin Mocha, 18% transparency)"
 
   _gset_rel "${schema}" use-theme-colors "false"
   _gset_rel "${schema}" background-color "'#1e1e2e'"
@@ -92,9 +119,13 @@ gnome_apply_terminal_theme() {
   _gset_rel "${schema}" bold-color-same-as-fg "true"
   _gset_rel "${schema}" palette "['#45475a', '#f38ba8', '#a6e3a1', '#f9e2af', '#89b4fa', '#f5c2e7', '#94e2d5', '#bac2de', '#585b70', '#f38ba8', '#a6e3a1', '#f9e2af', '#89b4fa', '#f5c2e7', '#94e2d5', '#a6adc8']"
   _gset_rel "${schema}" use-transparent-background "true"
-  _gset_rel "${schema}" background-transparency-percent "12"
+  _gset_rel "${schema}" background-transparency-percent "18"
   _gset_rel "${schema}" use-system-font "false"
-  _gset_rel "${schema}" font "'JetBrains Mono 12'"
+  if fc-list 2>/dev/null | grep -qi 'JetBrainsMono Nerd Font'; then
+    _gset_rel "${schema}" font "'JetBrainsMono Nerd Font 12'"
+  else
+    _gset_rel "${schema}" font "'JetBrains Mono 12'"
+  fi
   _gset_rel "${schema}" audible-bell "false"
   _gset_rel "${schema}" cursor-shape "'ibeam'"
   _gset_rel "${schema}" default-size-columns "120"
