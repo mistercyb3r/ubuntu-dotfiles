@@ -60,7 +60,7 @@ git pull
 bash gnome/dock.sh
 ```
 
-That moves Ubuntu Dock to the **bottom**, stops it stretching into a full side bar (`extend-height false`), and keeps it visible like a normal dock.
+That moves Ubuntu Dock to the **bottom** and stops it stretching into a full side bar. It **hides** when a window is fullscreen or sits over the dock, and comes back when you push the pointer to the bottom edge.
 
 ## After install
 

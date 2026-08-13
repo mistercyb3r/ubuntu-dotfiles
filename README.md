@@ -58,7 +58,7 @@ See [docs/installed-software.md](docs/installed-software.md) for why each tool e
 | Git | Shared defaults via `include.path`; **no** name/email in the repo |
 | Terminal | Kitty (Catppuccin, cursor trail), Starship, tmux |
 | SSH | Client defaults + example host file; **no** `sshd` |
-| GNOME | Dark purple Yaru, Papirus icons, centred **bottom dock** (not the left side panel) |
+| GNOME | Dark purple Yaru, Papirus icons, centred **bottom dock** that hides in fullscreen |
 | Look | Nerd Font, fastfetch, ghost-text, syntax colours, `matrix` / `pipes`. [docs/look.md](docs/look.md) |
 | Projects | `~/Projects/{personal,ai,web,python,homelab,experiments}` |
 | Performance | zram, SSD TRIM, `power-profiles-daemon` balanced |

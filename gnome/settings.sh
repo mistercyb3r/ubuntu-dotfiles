@@ -78,11 +78,16 @@ gnome_apply_dock() {
   _gset org.gnome.shell.extensions.dash-to-dock extend-height "false"
   _gset org.gnome.shell.extensions.dash-to-dock dock-alignment "'CENTER'"
 
-  # Always visible like a dock, not an auto-hiding side strip.
-  _gset org.gnome.shell.extensions.dash-to-dock dock-fixed "true"
-  _gset org.gnome.shell.extensions.dash-to-dock autohide "false"
-  _gset org.gnome.shell.extensions.dash-to-dock intellihide "false"
+  # Dodge windows: hide when a window overlaps or goes fullscreen.
+  # dock-fixed must be false or the dock cannot hide.
+  _gset org.gnome.shell.extensions.dash-to-dock dock-fixed "false"
+  _gset org.gnome.shell.extensions.dash-to-dock intellihide "true"
+  _gset org.gnome.shell.extensions.dash-to-dock intellihide-mode "'ALL_WINDOWS'"
+  _gset org.gnome.shell.extensions.dash-to-dock autohide "true"
   _gset org.gnome.shell.extensions.dash-to-dock autohide-in-fullscreen "true"
+  _gset org.gnome.shell.extensions.dash-to-dock require-pressure-to-show "true"
+  _gset org.gnome.shell.extensions.dash-to-dock hide-delay "0.2"
+  _gset org.gnome.shell.extensions.dash-to-dock show-delay "0.15"
 
   _gset org.gnome.shell.extensions.dash-to-dock custom-theme-shrink "true"
   _gset org.gnome.shell.extensions.dash-to-dock transparency-mode "'FIXED'"

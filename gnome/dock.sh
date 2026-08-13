@@ -10,4 +10,4 @@ _here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "${_here}/settings.sh"
 
 gnome_apply_dock
-log_success "Dock is at the bottom. If it still looks like a side panel, log out and back in."
+log_success "Bottom dock will hide for fullscreen and overlapping windows. Push the pointer to the bottom edge to show it."
